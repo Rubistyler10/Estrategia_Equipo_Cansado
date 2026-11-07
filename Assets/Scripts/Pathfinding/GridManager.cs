@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     public int depth = 80;
     public float cellSize = 0.5f;
     public LayerMask obstacleMask; // CON ESTO PODEMOS ELEGIR QUE CAPAS COMPROBAR
+    public LayerMask terrainMask; //para identificar las zonas de terreno.
 
     private GridNode[,] grid;
     
@@ -74,12 +75,39 @@ public class GridManager : MonoBehaviour
                     QueryTriggerInteraction.Ignore //evitar que los colliders marcados como triggers cuenten como obstáculos
                 );
 
-                grid[x, z] = new GridNode(
+
+                GridNode node = new GridNode(
                     position,
                     isWalkable,
                     x,
                     z
                 );
+
+                // Detectamos el terreno de la casilla.
+                Vector3 rayOrigin = new Vector3(
+                    position.x,
+                    ground.position.y + 5f,
+                    position.z
+                );
+
+                if (Physics.Raycast(
+                    rayOrigin,
+                    Vector3.down,
+                    out RaycastHit hit,
+                    10f,
+                    terrainMask,
+                    QueryTriggerInteraction.Collide))
+                {
+                    TerrainZone terrain = hit.collider.GetComponentInParent<TerrainZone>();
+
+                    if (terrain != null)
+                    {
+                        node.terrainType = terrain.terrainType;
+                    }
+                }
+
+                grid[x, z] = node;
+
 
             }
         }
@@ -212,14 +240,32 @@ public class GridManager : MonoBehaviour
         }
 
 
-        if (grid != null)
-        {
-            Gizmos.color = Color.red;
-
-            foreach (GridNode node in grid)
+      
+            if (grid != null)
             {
-                if (!node.isWalkable)
+                foreach (GridNode node in grid)
                 {
+                    // Elegimos el color según el terreno.
+                    switch (node.terrainType)
+                    {
+                        case TerrainType.Plain:
+                            Gizmos.color = new Color(0.2f, 0.8f, 0.2f, 0.35f);
+                            break;
+
+                        case TerrainType.Desert:
+                            Gizmos.color = new Color(1f, 0.75f, 0.2f, 0.5f);
+                            break;
+
+                        case TerrainType.Snow:
+                            Gizmos.color = new Color(0.7f, 0.9f, 1f, 0.5f);
+                            break;
+
+                        case TerrainType.Water:
+                            Gizmos.color = new Color(0.1f, 0.4f, 1f, 0.5f);
+                            break;
+                    }
+
+                    // Dibujamos el terreno.
                     Gizmos.DrawCube(
                         node.worldPosition + Vector3.up * 0.02f,
                         new Vector3(
@@ -228,10 +274,85 @@ public class GridManager : MonoBehaviour
                             cellSize * 0.9f
                         )
                     );
+
+                    // Los obstáculos se siguen mostrando en rojo.
+                    if (!node.isWalkable)
+                    {
+                        Gizmos.color = Color.red;
+
+                        Gizmos.DrawCube(
+                            node.worldPosition + Vector3.up * 0.04f,
+                            new Vector3(
+                                cellSize * 0.7f,
+                                0.03f,
+                                cellSize * 0.7f
+                            )
+                        );
+                    }
                 }
             }
-        }
+
+        
 
     }
+
+
+    public bool IsInsideGrid(int x, int z)
+    {
+        return grid != null &&
+               x >= 0 && x < width &&
+               z >= 0 && z < depth;
+    }
+
+    // Obtener una casilla mediante sus coordenadas.
+    public GridNode GetNode(int x, int z)
+    {
+        if (!IsInsideGrid(x, z))
+            return null;
+
+        return grid[x, z];
+    }
+
+    // Comprobar si una casilla está ocupada.
+    public bool IsOccupied(int x, int z)
+    {
+        GridNode node = GetNode(x, z);
+
+        if (node == null)
+            return false;
+
+        return node.isOccupied;
+    }
+
+    // Ocupar una casilla con una unidad o base.
+    public bool OccupyNode(int x, int z, GameObject obj)
+    {
+        GridNode node = GetNode(x, z);
+
+        if (node == null || obj == null ||
+            !node.isWalkable || node.isOccupied)
+            return false;
+
+        node.isOccupied = true;
+        node.occupant = obj;
+
+        return true;
+    }
+
+    // Liberar una casilla.
+    public bool FreeNode(int x, int z, GameObject obj)
+    {
+        GridNode node = GetNode(x, z);
+
+        if (node == null || obj == null ||
+            node.occupant != obj)
+            return false;
+
+        node.isOccupied = false;
+        node.occupant = null;
+
+        return true;
+    }
+
 
 }

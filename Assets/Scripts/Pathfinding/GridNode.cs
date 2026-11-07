@@ -7,6 +7,10 @@ public class GridNode
     public Vector3 worldPosition;
     public bool isWalkable;
 
+    public TerrainType terrainType;
+    public bool isOccupied;
+    public GameObject occupant;
+
     public int gridX;
     public int gridZ;
 
@@ -29,6 +33,11 @@ public class GridNode
     {
         worldPosition = position;
         isWalkable = walkable;
+
+        terrainType = TerrainType.Plain;
+        isOccupied = false;
+        occupant = null;
+
 
         gridX = x;
         gridZ = z;

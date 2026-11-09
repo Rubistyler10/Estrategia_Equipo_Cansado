@@ -42,7 +42,8 @@ public class AnimalDragController : MonoBehaviour
 
                 if (animal != null &&
                     animal.isActiveAndEnabled &&
-                    animal.CurrentNode != null)
+                    animal.CurrentNode != null &&
+                    !animal.IsMoving)
                 {
                     selectedAnimal = animal;
                 }

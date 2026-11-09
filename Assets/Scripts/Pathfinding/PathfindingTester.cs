@@ -6,6 +6,7 @@ public class PathfindingTester : MonoBehaviour
 {
     public GridManager gridManager;
     public AStarPathfinding pathfinding;
+    public AnimalUnit testAnimal;
 
     public Transform startPoint;
     public Transform targetPoint;
@@ -48,9 +49,10 @@ public class PathfindingTester : MonoBehaviour
         }
 
         // Calculamos el camino utilizando A*.
-        path = pathfinding.FindPath(
-            startNode,
-            targetNode
+            path = pathfinding.FindPath(
+        startNode,
+        targetNode,
+        testAnimal
         );
 
         // Mostramos el resultado.

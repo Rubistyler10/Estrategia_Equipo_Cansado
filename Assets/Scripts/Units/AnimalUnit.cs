@@ -18,6 +18,8 @@ public class AnimalUnit : MonoBehaviour
     public AnimalType animalType;
     public GridManager gridManager;
 
+    public AStarPathfinding pathfinding;
+
     [Header("Animaciones")]
     public Animator animator;
     public string idleState = "Idle";
@@ -30,6 +32,8 @@ public class AnimalUnit : MonoBehaviour
     public float walkSpeed = 1.5f;
 
     public GridNode CurrentNode { get; private set; }
+
+    public bool IsMoving => walkRoutine != null;
 
     private Coroutine walkRoutine;
     private string currentAnimation = "";
@@ -60,6 +64,9 @@ public class AnimalUnit : MonoBehaviour
     {
         if (gridManager == null)
             gridManager = FindFirstObjectByType<GridManager>();
+        
+        if (pathfinding == null)
+            pathfinding = FindFirstObjectByType<AStarPathfinding>();
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
@@ -116,74 +123,99 @@ public class AnimalUnit : MonoBehaviour
         PlayAnimation(runState);
     }
 
-    public void Drop(GridNode destination)
+    
+public void Drop(GridNode destination)
+{
+    if (destination == null || !CanReach(destination))
     {
-        if (destination == null || !CanReach(destination))
-        {
-            ReturnToOrigin();
-            return;
-        }
-
-        if (destination != CurrentNode)
-        {
-            bool occupied = gridManager.OccupyNode(
-                destination.gridX,
-                destination.gridZ,
-                gameObject
-            );
-
-            if (!occupied)
-            {
-                ReturnToOrigin();
-                return;
-            }
-
-            gridManager.FreeNode(
-                CurrentNode.gridX,
-                CurrentNode.gridZ,
-                gameObject
-            );
-
-            CurrentNode = destination;
-        }
-
-        // Soltar el animal sobre la superficie.
-        Vector3 groundPosition =
-            GetGroundPosition(CurrentNode);
-
-        transform.position = new Vector3(
-            transform.position.x,
-            groundPosition.y,
-            transform.position.z
-        );
-
-        walkRoutine = StartCoroutine(WalkToCenter());
+        ReturnToOrigin();
+        return;
     }
 
-    private IEnumerator WalkToCenter()
+    // Si soltamos el animal en su propia casilla.
+    if (destination == CurrentNode)
     {
-        PlayAnimation(walkState);
+        ReturnToOrigin();
+        return;
+    }
 
-        Vector3 center = GetGroundPosition(CurrentNode);
+    // Guardamos el origen antes de actualizar CurrentNode.
+    GridNode origin = CurrentNode;
+
+    // Calculamos la ruta que seguirá visualmente.
+    List<GridNode> path = pathfinding.FindPath(
+        origin,
+        destination,
+        this
+    );
+
+    if (path == null || path.Count == 0)
+    {
+        ReturnToOrigin();
+        return;
+    }
+
+    // Reservamos la casilla de destino.
+    bool occupied = gridManager.OccupyNode(
+        destination.gridX,
+        destination.gridZ,
+        gameObject
+    );
+
+    if (!occupied)
+    {
+        ReturnToOrigin();
+        return;
+    }
+
+    // Liberamos la casilla anterior.
+    gridManager.FreeNode(
+        origin.gridX,
+        origin.gridZ,
+        gameObject
+    );
+
+    CurrentNode = destination;
+
+    // Volvemos visualmente al origen para recorrer la ruta.
+    transform.position = GetGroundPosition(origin);
+
+    walkRoutine = StartCoroutine(WalkAlongPath(path));
+}
+
+
+    
+private IEnumerator WalkAlongPath(List<GridNode> path)
+{
+    PlayAnimation(walkState);
+
+    // Empezamos en 1 porque el nodo 0 es el origen.
+    for (int i = 1; i < path.Count; i++)
+    {
+        Vector3 targetPosition =
+            GetGroundPosition(path[i]);
 
         while (Vector3.Distance(
-            transform.position, center) > 0.01f)
+            transform.position,
+            targetPosition) > 0.01f)
         {
             transform.position = Vector3.MoveTowards(
                 transform.position,
-                center,
+                targetPosition,
                 walkSpeed * Time.deltaTime
             );
 
             yield return null;
         }
 
-        transform.position = center;
-
-        walkRoutine = null;
-
-        PlayAnimation(idleState);
+        transform.position = targetPosition;
     }
+
+    walkRoutine = null;
+
+    PlayAnimation(idleState);
+}
+
 
     private void ReturnToOrigin()
     {
@@ -205,7 +237,7 @@ public class AnimalUnit : MonoBehaviour
         currentAnimation = state;
     }
 
-    private int GetTerrainCost(TerrainType terrain)
+    public int GetTerrainCost(TerrainType terrain)
     {
         switch (terrain)
         {
@@ -228,94 +260,52 @@ public class AnimalUnit : MonoBehaviour
         }
     }
 
-    public bool CanReach(GridNode destination)
-    {
-        if (CurrentNode == null || destination == null)
-            return false;
-
-        if (destination == CurrentNode)
-            return true;
-
-        if (!destination.isWalkable || destination.isOccupied)
-            return false;
-
-        Dictionary<GridNode, int> costs =
-            new Dictionary<GridNode, int>();
-
-        List<GridNode> pending = new List<GridNode>();
-
-        costs[CurrentNode] = 0;
-        pending.Add(CurrentNode);
-
-        while (pending.Count > 0)
-        {
-            GridNode current = pending[0];
-
-            foreach (GridNode node in pending)
-            {
-                if (costs[node] < costs[current])
-                    current = node;
-            }
-
-            pending.Remove(current);
-
-            if (current == destination)
-                return true;
-
-            foreach (GridNode neighbor in current.neighbors)
-            {
-                if (!neighbor.isWalkable ||
-                    neighbor.isOccupied)
-                    continue;
-
-                if (!CanPassDiagonal(current, neighbor))
-                    continue;
-
-                int cost =
-                    GetTerrainCost(neighbor.terrainType);
-
-                if (cost == int.MaxValue)
-                    continue;
-
-                int newCost = costs[current] + cost;
-
-                if (newCost > MovementPoints)
-                    continue;
-
-                if (!costs.ContainsKey(neighbor) ||
-                    newCost < costs[neighbor])
-                {
-                    costs[neighbor] = newCost;
-
-                    if (!pending.Contains(neighbor))
-                        pending.Add(neighbor);
-                }
-            }
-        }
-
+    
+public bool CanReach(GridNode destination)
+{
+    if (CurrentNode == null || destination == null ||
+        pathfinding == null)
         return false;
-    }
 
-    private bool CanPassDiagonal(GridNode from, GridNode to)
+    // Permanecer en la misma casilla siempre es válido.
+    if (destination == CurrentNode)
+        return true;
+
+    // No podemos movernos a una casilla bloqueada u ocupada.
+    if (!destination.isWalkable || destination.isOccupied)
+        return false;
+
+    // Calculamos la ruta utilizando A*.
+    List<GridNode> path = pathfinding.FindPath(
+        CurrentNode,
+        destination,
+        this
+    );
+
+    if (path == null || path.Count == 0)
+        return false;
+
+    int totalCost = 0;
+
+    // La primera casilla es el origen y no tiene coste.
+    for (int i = 1; i < path.Count; i++)
     {
-        int dx = to.gridX - from.gridX;
-        int dz = to.gridZ - from.gridZ;
+        int cost = GetTerrainCost(path[i].terrainType);
 
-        if (dx == 0 || dz == 0)
-            return true;
-
-        GridNode sideA = gridManager.GetNode(
-            from.gridX + dx, from.gridZ);
-
-        GridNode sideB = gridManager.GetNode(
-            from.gridX, from.gridZ + dz);
-
-        if (sideA == null || sideB == null)
+        if (cost == int.MaxValue)
             return false;
 
-        return sideA.isWalkable && !sideA.isOccupied &&
-               sideB.isWalkable && !sideB.isOccupied;
+        totalCost += cost;
+
+        // No podemos superar los puntos de movimiento.
+        if (totalCost > MovementPoints)
+            return false;
     }
+
+    return true;
+}
+
+
 
     private void OnDestroy()
     {

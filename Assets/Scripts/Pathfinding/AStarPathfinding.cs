@@ -7,8 +7,9 @@ public class AStarPathfinding : MonoBehaviour
     public GridManager gridManager;
 
     public List<GridNode> FindPath(
-        GridNode startNode,
-        GridNode targetNode)
+    GridNode startNode,
+    GridNode targetNode,
+    AnimalUnit animal)
     {
         List<GridNode> openList = new List<GridNode>();
 

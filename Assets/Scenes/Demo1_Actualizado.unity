@@ -15124,6 +15124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490624897}
   - component: {fileID: 1490624896}
+  - component: {fileID: 1490624898}
   m_Layer: 0
   m_Name: GridManager
   m_TagString: Untagged
@@ -15168,6 +15169,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1490624898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490624895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14b51f233b867e4ca2fcdcdf595fbe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AStarPathfinding
+  gridManager: {fileID: 1490624896}
 --- !u!1 &1498701770
 GameObject:
   m_ObjectHideFlags: 0
@@ -21982,6 +21996,10 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
+    - target: {fileID: 3425257189567077349, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
+      propertyPath: pathfinding
+      value: 
+      objectReference: {fileID: 1490624898}
     - target: {fileID: 4128288370996714323, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.592
@@ -22043,6 +22061,10 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
+    - target: {fileID: 825078127193299527, guid: bd790c459ad948e4da2ab5b241bf95fa, type: 3}
+      propertyPath: pathfinding
+      value: 
+      objectReference: {fileID: 1490624898}
     - target: {fileID: 2241985062978645317, guid: bd790c459ad948e4da2ab5b241bf95fa, type: 3}
       propertyPath: m_Name
       value: UNIDAD_GORILA
@@ -22108,6 +22130,10 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
+    - target: {fileID: 1367521436120472719, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
+      propertyPath: pathfinding
+      value: 
+      objectReference: {fileID: 1490624898}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.574
@@ -22205,6 +22231,10 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
+    - target: {fileID: 3025024044737192340, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
+      propertyPath: pathfinding
+      value: 
+      objectReference: {fileID: 1490624898}
     - target: {fileID: 3841327927142387608, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
       propertyPath: m_Name
       value: "UNIDAD_JABAL\xCD"
@@ -22226,6 +22256,10 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
+    - target: {fileID: 2422147882190899898, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
+      propertyPath: pathfinding
+      value: 
+      objectReference: {fileID: 1490624898}
     - target: {fileID: 5922607625655625514, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
       propertyPath: m_Name
       value: UNIDAD_TIGRE

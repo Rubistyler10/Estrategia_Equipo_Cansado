@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2620655548133794229}
   - component: {fileID: 6715919270568531983}
   - component: {fileID: 3025024044737192340}
+  - component: {fileID: 8208717902111558288}
   m_Layer: 0
   m_Name: "UNIDAD_JABAL\xCD"
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+--- !u!114 &8208717902111558288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3841327927142387608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e712e250f8577c458e8faf3528bfbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
+  playerId: 1
 --- !u!1001 &5141012873562482265
 PrefabInstance:
   m_ObjectHideFlags: 0

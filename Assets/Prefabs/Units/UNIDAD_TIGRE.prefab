@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8523537380936407992}
   - component: {fileID: 4949886082514675937}
   - component: {fileID: 2422147882190899898}
+  - component: {fileID: 8643453369218574316}
   m_Layer: 0
   m_Name: UNIDAD_TIGRE
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+--- !u!114 &8643453369218574316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5922607625655625514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e712e250f8577c458e8faf3528bfbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
+  playerId: 2
 --- !u!1001 &6979455676735336358
 PrefabInstance:
   m_ObjectHideFlags: 0

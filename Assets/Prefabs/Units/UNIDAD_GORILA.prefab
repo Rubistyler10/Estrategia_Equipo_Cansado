@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7413882325493496071}
   - component: {fileID: 2842153814366642875}
   - component: {fileID: 825078127193299527}
+  - component: {fileID: 2970158580546697340}
   m_Layer: 0
   m_Name: UNIDAD_GORILA
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+--- !u!114 &2970158580546697340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241985062978645317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e712e250f8577c458e8faf3528bfbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
+  playerId: 2
 --- !u!1001 &5607345535329332233
 PrefabInstance:
   m_ObjectHideFlags: 0

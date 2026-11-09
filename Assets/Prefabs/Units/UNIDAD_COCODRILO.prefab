@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4525792887903080576}
   - component: {fileID: 3711769053643774352}
   - component: {fileID: 1367521436120472719}
+  - component: {fileID: 2648496095081150538}
   m_Layer: 0
   m_Name: UNIDAD_COCODRILO
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+--- !u!114 &2648496095081150538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924265321444632382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e712e250f8577c458e8faf3528bfbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
+  playerId: 1
 --- !u!1001 &2483754790897559862
 PrefabInstance:
   m_ObjectHideFlags: 0

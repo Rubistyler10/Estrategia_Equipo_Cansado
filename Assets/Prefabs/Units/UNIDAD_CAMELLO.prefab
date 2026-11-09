@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4128288370996714323}
   - component: {fileID: 2457722893697361111}
   - component: {fileID: 3425257189567077349}
+  - component: {fileID: 3689279878628710189}
   m_Layer: 0
   m_Name: UNIDAD_CAMELLO
   m_TagString: Untagged
@@ -78,6 +79,19 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+--- !u!114 &3689279878628710189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5453390522699991685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e712e250f8577c458e8faf3528bfbda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
+  playerId: 1
 --- !u!1001 &583258908883900379
 PrefabInstance:
   m_ObjectHideFlags: 0

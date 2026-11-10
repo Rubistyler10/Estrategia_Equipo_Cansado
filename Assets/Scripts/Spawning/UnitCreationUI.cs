@@ -9,6 +9,7 @@ public class UnitCreationUI : MonoBehaviour
     public UnitSpawner unitSpawner;
     public ResourceManager resourceManager;
     public ResourceUI resourceUI;
+    public TurnManager turnManager;
 
     [Header("Panel")]
     public GameObject panelCrearUnidad;
@@ -51,6 +52,9 @@ public class UnitCreationUI : MonoBehaviour
             return;
 
         int playerId = resourceUI.activePlayer;
+        if (turnManager != null &&
+            !turnManager.IsPlayersTurn(playerId))
+            return;
         int food = resourceManager.GetFood(playerId);
 
         botonJabali.interactable =
@@ -82,6 +86,10 @@ public class UnitCreationUI : MonoBehaviour
     private void CrearAnimal(AnimalType tipo)
     {
         int playerId = resourceUI.activePlayer;
+
+        if (turnManager != null &&
+            !turnManager.IsPlayersTurn(playerId))
+            return;
 
         bool creado =
             unitSpawner.CreateUnit(playerId, tipo);

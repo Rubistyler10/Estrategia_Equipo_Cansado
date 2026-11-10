@@ -79,6 +79,15 @@ MonoBehaviour:
   groundOffset: 0.95
   liftHeight: 0.6
   walkSpeed: 1.5
+  movementPoints: 1
+  plainMovementCost: 1
+  desertMovementCost: 2
+  snowMovementCost: 1
+  waterMovementCost: 2147483647
+  maxHealth: 8
+  attack: 5
+  defense: 1
+  attackRange: 1
 --- !u!114 &8643453369218574316
 MonoBehaviour:
   m_ObjectHideFlags: 0

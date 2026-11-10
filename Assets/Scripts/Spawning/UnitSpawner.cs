@@ -10,6 +10,8 @@ public class UnitSpawner : MonoBehaviour
     [Header("Puntos de aparicion")]
     public Transform spawnJugador1;
     public Transform spawnJugador2;
+    public PlayerBase baseJugador1;
+    public PlayerBase baseJugador2;
 
     [Header("Prefabs")]
     public GameObject jabaliPrefab;
@@ -36,6 +38,17 @@ public class UnitSpawner : MonoBehaviour
         if (resourceManager == null)
             resourceManager =
                 FindFirstObjectByType<ResourceManager>();
+
+        PlayerBase[] bases =
+            FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
+
+        foreach (PlayerBase playerBase in bases)
+        {
+            if (playerBase.playerId == 1)
+                baseJugador1 = playerBase;
+            else if (playerBase.playerId == 2)
+                baseJugador2 = playerBase;
+        }
     }
 
     public bool CreateUnit(int playerId, AnimalType type)
@@ -70,6 +83,11 @@ public class UnitSpawner : MonoBehaviour
 
         Transform spawn = playerId == 1
             ? spawnJugador1 : spawnJugador2;
+        PlayerBase playerBase = playerId == 1
+            ? baseJugador1 : baseJugador2;
+
+        if (playerBase != null)
+            spawn = playerBase.transform;
 
         if (spawn == null)
         {

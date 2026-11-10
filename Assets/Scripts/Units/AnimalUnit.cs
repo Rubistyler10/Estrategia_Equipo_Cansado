@@ -25,34 +25,39 @@ public class AnimalUnit : MonoBehaviour
     public string idleState = "Idle";
     public string walkState = "Walk";
     public string runState = "Run";
+    public string deathState = "Die";
+    [Min(0.1f)] public float deathAnimationDuration = 1f;
 
     [Header("Movimiento visual")]
     public float groundOffset = 0.05f;
     public float liftHeight = 0.6f;
     public float walkSpeed = 1.5f;
 
+    [Header("Estadisticas de movimiento")]
+    [Min(1)] public int movementPoints = 1;
+    [Min(1)] public int plainMovementCost = 1;
+    [Min(1)] public int desertMovementCost = 2;
+    [Min(1)] public int snowMovementCost = 2;
+    [Min(1)] public int waterMovementCost = 1;
+
+    [Header("Estadisticas de combate")]
+    [Min(1)] public int maxHealth = 10;
+    [Min(0)] public int attack = 3;
+    [Min(0)] public int defense = 0;
+    [Min(1)] public int attackRange = 1;
+
     public GridNode CurrentNode { get; private set; }
 
-    public bool IsMoving => walkRoutine != null;
+    public bool IsMoving => walkRoutine != null || attackBumpRoutine != null;
+    public bool IsDead => deathRoutine != null;
+    public bool HasMovedThisTurn { get; private set; }
+    public bool HasAttackedThisTurn { get; private set; }
+    public int CurrentHealth { get; private set; }
 
     private Coroutine walkRoutine;
+    private Coroutine attackBumpRoutine;
+    private Coroutine deathRoutine;
     private string currentAnimation = "";
-
-    public int MovementPoints
-    {
-        get
-        {
-            switch (animalType)
-            {
-                case AnimalType.Jabali: return 1;
-                case AnimalType.Tigre: return 1;
-                case AnimalType.Gorila: return 2;
-                case AnimalType.Cocodrilo: return 3;
-                case AnimalType.Camello: return 4;
-                default: return 1;
-            }
-        }
-    }
 
     private Vector3 GetGroundPosition(GridNode node)
     {
@@ -62,6 +67,8 @@ public class AnimalUnit : MonoBehaviour
 
     private void Start()
     {
+        CurrentHealth = maxHealth;
+
         if (gridManager == null)
             gridManager = FindFirstObjectByType<GridManager>();
         
@@ -128,14 +135,16 @@ public void Drop(GridNode destination)
 {
     if (destination == null || !CanReach(destination))
     {
-        ReturnToOrigin();
+        Debug.Log("[ANIMALUNIT][DROP] Movimiento rechazado para " + name + ".");
+        CancelDrag();
         return;
     }
 
     // Si soltamos el animal en su propia casilla.
     if (destination == CurrentNode)
     {
-        ReturnToOrigin();
+        Debug.Log("[ANIMALUNIT][DROP] Movimiento cancelado en la casilla de origen: " + name + ".");
+        CancelDrag();
         return;
     }
 
@@ -151,7 +160,8 @@ public void Drop(GridNode destination)
 
     if (path == null || path.Count == 0)
     {
-        ReturnToOrigin();
+        Debug.Log("[ANIMALUNIT][DROP] No se encontro ruta para " + name + ".");
+        CancelDrag();
         return;
     }
 
@@ -164,7 +174,8 @@ public void Drop(GridNode destination)
 
     if (!occupied)
     {
-        ReturnToOrigin();
+        Debug.Log("[ANIMALUNIT][DROP] Casilla de destino ocupada para " + name + ".");
+        CancelDrag();
         return;
     }
 
@@ -176,12 +187,100 @@ public void Drop(GridNode destination)
     );
 
     CurrentNode = destination;
+    HasMovedThisTurn = true;
+    Debug.Log("[ANIMALUNIT][DROP] " + name + " se mueve a (" +
+        destination.gridX + "," + destination.gridZ + ").");
 
     // Volvemos visualmente al origen para recorrer la ruta.
     transform.position = GetGroundPosition(origin);
 
     walkRoutine = StartCoroutine(WalkAlongPath(path));
 }
+
+    public void CancelDrag()
+    {
+        transform.position = GetGroundPosition(CurrentNode);
+        PlayAnimation(idleState);
+    }
+
+    public void PlayAttackBump(Vector3 targetPosition)
+    {
+        if (attackBumpRoutine != null)
+            StopCoroutine(attackBumpRoutine);
+
+        transform.position = GetGroundPosition(CurrentNode);
+        attackBumpRoutine = StartCoroutine(AttackBumpRoutine(targetPosition));
+    }
+
+    public bool CanMove()
+    {
+        return !IsDead && !HasMovedThisTurn && !IsMoving;
+    }
+
+    public bool CanAttack()
+    {
+        return !IsDead && !HasAttackedThisTurn && !IsMoving;
+    }
+
+    public void ResetTurnActions()
+    {
+        HasMovedThisTurn = false;
+        HasAttackedThisTurn = false;
+    }
+
+    public void MarkAttacked()
+    {
+        HasAttackedThisTurn = true;
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        CurrentHealth = Mathf.Max(0, CurrentHealth - Mathf.Max(0, damage));
+    }
+
+    public bool IsDefeated()
+    {
+        return CurrentHealth <= 0;
+    }
+
+    public void Die()
+    {
+        if (!IsDefeated() || IsDead)
+            return;
+
+        if (walkRoutine != null)
+        {
+            StopCoroutine(walkRoutine);
+            walkRoutine = null;
+        }
+
+        if (attackBumpRoutine != null)
+        {
+            StopCoroutine(attackBumpRoutine);
+            attackBumpRoutine = null;
+        }
+
+        if (gridManager != null && CurrentNode != null)
+        {
+            gridManager.FreeNode(
+                CurrentNode.gridX,
+                CurrentNode.gridZ,
+                gameObject
+            );
+        }
+
+        foreach (Collider unitCollider in GetComponentsInChildren<Collider>())
+            unitCollider.enabled = false;
+
+        deathRoutine = StartCoroutine(DeathRoutine());
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        PlayAnimation(deathState);
+        yield return new WaitForSeconds(deathAnimationDuration);
+        Destroy(gameObject);
+    }
 
 
     
@@ -216,6 +315,41 @@ private IEnumerator WalkAlongPath(List<GridNode> path)
     PlayAnimation(idleState);
 }
 
+    private IEnumerator AttackBumpRoutine(Vector3 targetPosition)
+    {
+        Vector3 origin = GetGroundPosition(CurrentNode);
+        Vector3 direction = targetPosition - origin;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude > 0.001f)
+            direction.Normalize();
+
+        Vector3 bumpPosition = origin + direction * (gridManager.cellSize * 0.25f);
+        float duration = 0.12f;
+        float elapsed = 0f;
+
+        PlayAnimation(runState);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            transform.position = Vector3.Lerp(origin, bumpPosition, elapsed / duration);
+            yield return null;
+        }
+
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            transform.position = Vector3.Lerp(bumpPosition, origin, elapsed / duration);
+            yield return null;
+        }
+
+        transform.position = origin;
+        attackBumpRoutine = null;
+        PlayAnimation(idleState);
+    }
+
 
     private void ReturnToOrigin()
     {
@@ -242,18 +376,16 @@ private IEnumerator WalkAlongPath(List<GridNode> path)
         switch (terrain)
         {
             case TerrainType.Plain:
-                return 1;
+                return plainMovementCost;
 
             case TerrainType.Desert:
-                return animalType == AnimalType.Camello ? 1 :
-                       animalType == AnimalType.Gorila ? 3 : 2;
+                return desertMovementCost;
 
             case TerrainType.Snow:
-                return animalType == AnimalType.Tigre ? 1 : 2;
+                return snowMovementCost;
 
             case TerrainType.Water:
-                return animalType == AnimalType.Cocodrilo
-                    ? 1 : int.MaxValue;
+                return waterMovementCost;
 
             default:
                 return int.MaxValue;
@@ -298,7 +430,7 @@ public bool CanReach(GridNode destination)
         totalCost += cost;
 
         // No podemos superar los puntos de movimiento.
-        if (totalCost > MovementPoints)
+        if (totalCost > movementPoints)
             return false;
     }
 

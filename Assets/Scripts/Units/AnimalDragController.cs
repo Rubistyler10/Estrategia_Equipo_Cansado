@@ -10,6 +10,8 @@ public class AnimalDragController : MonoBehaviour
     [Header("Referencias")]
     public Camera gameCamera;
     public GridManager gridManager;
+    public TurnManager turnManager;
+    public CombatSystem combatSystem;
 
     private AnimalUnit selectedAnimal;
 
@@ -20,6 +22,10 @@ public class AnimalDragController : MonoBehaviour
 
         if (gridManager == null)
             gridManager = FindFirstObjectByType<GridManager>();
+        if (turnManager == null)
+            turnManager = FindFirstObjectByType<TurnManager>();
+        if (combatSystem == null)
+            combatSystem = FindFirstObjectByType<CombatSystem>();
     }
 
     private void Update()
@@ -43,9 +49,13 @@ public class AnimalDragController : MonoBehaviour
                 if (animal != null &&
                     animal.isActiveAndEnabled &&
                     animal.CurrentNode != null &&
-                    !animal.IsMoving)
+                    !animal.IsMoving &&
+                    (animal.CanMove() || animal.CanAttack()) &&
+                    (turnManager == null || turnManager.CanUnitAct(animal)))
                 {
                     selectedAnimal = animal;
+                    Debug.Log("[ANIMALDRAGCONTROLLER][SELECT] Unidad seleccionada: " +
+                        animal.name + ".");
                 }
             }
         }
@@ -72,9 +82,78 @@ public class AnimalDragController : MonoBehaviour
                     gridManager.GetNodeFromWorldPosition(dropPoint);
             }
 
-            selectedAnimal.Drop(destination);
+            bool actionTaken = false;
+
+            if (destination != null && destination.isOccupied &&
+                destination.occupant != null && combatSystem != null)
+            {
+                AnimalUnit defender =
+                    destination.occupant.GetComponent<AnimalUnit>();
+                if (defender != null)
+                    actionTaken = combatSystem.TryAttack(
+                        selectedAnimal, defender);
+                else
+                {
+                    PlayerBase baseTarget =
+                        destination.occupant.GetComponent<PlayerBase>();
+                    actionTaken = combatSystem.TryAttack(
+                        selectedAnimal, baseTarget);
+                }
+            }
+            else
+            {
+                if (selectedAnimal.CanMove())
+                {
+                    selectedAnimal.Drop(destination);
+                    actionTaken = destination != null &&
+                        selectedAnimal.CurrentNode == destination;
+                }
+            }
+
+            if (!actionTaken && !selectedAnimal.IsMoving)
+                selectedAnimal.CancelDrag();
+
             selectedAnimal = null;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (selectedAnimal == null || gridManager == null ||
+            gridManager.Grid == null || selectedAnimal.CurrentNode == null)
+            return;
+
+        if (selectedAnimal.CanMove())
+        {
+            Gizmos.color = new Color(0.1f, 1f, 0.2f, 0.9f);
+            foreach (GridNode node in gridManager.Grid)
+            {
+                if (!node.isOccupied && selectedAnimal.CanReach(node))
+                    DrawNodeGizmo(node, 0.18f);
+            }
+        }
+        else if (selectedAnimal.HasMovedThisTurn && selectedAnimal.CanAttack())
+        {
+            Gizmos.color = new Color(1f, 0.2f, 0.1f, 0.9f);
+            foreach (GridNode node in gridManager.Grid)
+            {
+                int xDistance = Mathf.Abs(
+                    node.gridX - selectedAnimal.CurrentNode.gridX);
+                int zDistance = Mathf.Abs(
+                    node.gridZ - selectedAnimal.CurrentNode.gridZ);
+
+                if (Mathf.Max(xDistance, zDistance) <= selectedAnimal.attackRange)
+                    DrawNodeGizmo(node, 0.2f);
+            }
+        }
+    }
+
+    private void DrawNodeGizmo(GridNode node, float height)
+    {
+        Gizmos.DrawCube(
+            node.worldPosition + Vector3.up * height,
+            new Vector3(gridManager.cellSize * 0.75f, 0.03f,
+                gridManager.cellSize * 0.75f));
     }
 
     private bool GetMouseWorldPosition(out Vector3 position)

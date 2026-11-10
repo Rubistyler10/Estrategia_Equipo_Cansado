@@ -25,6 +25,7 @@ public class AnimalUnit : MonoBehaviour
     public string idleState = "Idle";
     public string walkState = "Walk";
     public string runState = "Run";
+    // Keep the defeated object alive long enough for the death animation.
     public string deathState = "Die";
     [Min(0.1f)] public float deathAnimationDuration = 1f;
 
@@ -34,6 +35,8 @@ public class AnimalUnit : MonoBehaviour
     public float walkSpeed = 1.5f;
 
     [Header("Estadisticas de movimiento")]
+    // These values are configured per prefab rather than inferred from the
+    // animal type, making balancing possible without code changes.
     [Min(1)] public int movementPoints = 1;
     [Min(1)] public int plainMovementCost = 1;
     [Min(1)] public int desertMovementCost = 2;
@@ -48,6 +51,7 @@ public class AnimalUnit : MonoBehaviour
 
     public GridNode CurrentNode { get; private set; }
 
+    // Visual movement effects also block new actions until they finish.
     public bool IsMoving => walkRoutine != null || attackBumpRoutine != null;
     public bool IsDead => deathRoutine != null;
     public bool HasMovedThisTurn { get; private set; }
@@ -55,6 +59,7 @@ public class AnimalUnit : MonoBehaviour
     public int CurrentHealth { get; private set; }
 
     private Coroutine walkRoutine;
+    // Each effect has its own routine so it can be stopped independently.
     private Coroutine attackBumpRoutine;
     private Coroutine deathRoutine;
     private string currentAnimation = "";
@@ -67,6 +72,7 @@ public class AnimalUnit : MonoBehaviour
 
     private void Start()
     {
+        // Runtime health starts from the maximum configured on the prefab.
         CurrentHealth = maxHealth;
 
         if (gridManager == null)
@@ -135,6 +141,8 @@ public void Drop(GridNode destination)
 {
     if (destination == null || !CanReach(destination))
     {
+        // All invalid paths use CancelDrag so the visual position matches the
+        // node that still owns the unit.
         Debug.Log("[ANIMALUNIT][DROP] Movimiento rechazado para " + name + ".");
         CancelDrag();
         return;
@@ -197,6 +205,7 @@ public void Drop(GridNode destination)
     walkRoutine = StartCoroutine(WalkAlongPath(path));
 }
 
+    // Restore the visual position without changing grid registration.
     public void CancelDrag()
     {
         transform.position = GetGroundPosition(CurrentNode);
@@ -205,6 +214,7 @@ public void Drop(GridNode destination)
 
     public void PlayAttackBump(Vector3 targetPosition)
     {
+        // Combat is already resolved when this feedback animation begins.
         if (attackBumpRoutine != null)
             StopCoroutine(attackBumpRoutine);
 
@@ -214,6 +224,7 @@ public void Drop(GridNode destination)
 
     public bool CanMove()
     {
+        // A unit may move once per turn and cannot overlap another animation.
         return !IsDead && !HasMovedThisTurn && !IsMoving;
     }
 
@@ -224,6 +235,7 @@ public void Drop(GridNode destination)
 
     public void ResetTurnActions()
     {
+        // TurnManager calls this when the owning player becomes active.
         HasMovedThisTurn = false;
         HasAttackedThisTurn = false;
     }
@@ -235,6 +247,7 @@ public void Drop(GridNode destination)
 
     public void ReceiveDamage(int damage)
     {
+        // Clamp damage here so every caller follows the same health rules.
         CurrentHealth = Mathf.Max(0, CurrentHealth - Mathf.Max(0, damage));
     }
 
@@ -248,6 +261,8 @@ public void Drop(GridNode destination)
         if (!IsDefeated() || IsDead)
             return;
 
+        // Remove the unit from gameplay immediately, then play its death
+        // animation before destroying the GameObject.
         if (walkRoutine != null)
         {
             StopCoroutine(walkRoutine);
@@ -317,6 +332,8 @@ private IEnumerator WalkAlongPath(List<GridNode> path)
 
     private IEnumerator AttackBumpRoutine(Vector3 targetPosition)
     {
+        // Move a fraction of a cell toward the target and back without
+        // changing CurrentNode or grid occupancy.
         Vector3 origin = GetGroundPosition(CurrentNode);
         Vector3 direction = targetPosition - origin;
         direction.y = 0f;
@@ -373,6 +390,8 @@ private IEnumerator WalkAlongPath(List<GridNode> path)
 
     public int GetTerrainCost(TerrainType terrain)
     {
+        // Terrain costs are per-prefab values so balance changes stay in the
+        // Inspector rather than requiring changes to this shared class.
         switch (terrain)
         {
             case TerrainType.Plain:

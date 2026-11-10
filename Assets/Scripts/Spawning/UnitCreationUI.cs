@@ -9,6 +9,8 @@ public class UnitCreationUI : MonoBehaviour
     public UnitSpawner unitSpawner;
     public ResourceManager resourceManager;
     public ResourceUI resourceUI;
+    // Prevent this player's recruitment controls from being used during the
+    // opposing player's turn.
     public TurnManager turnManager;
 
     [Header("Panel")]
@@ -52,6 +54,8 @@ public class UnitCreationUI : MonoBehaviour
             return;
 
         int playerId = resourceUI.activePlayer;
+        // The panel may remain open across a turn change, so stop updating it
+        // as soon as it no longer belongs to the active player.
         if (turnManager != null &&
             !turnManager.IsPlayersTurn(playerId))
             return;
@@ -87,6 +91,8 @@ public class UnitCreationUI : MonoBehaviour
     {
         int playerId = resourceUI.activePlayer;
 
+        // Check again at the action boundary in case a queued UI click
+        // arrives after the turn has changed.
         if (turnManager != null &&
             !turnManager.IsPlayersTurn(playerId))
             return;

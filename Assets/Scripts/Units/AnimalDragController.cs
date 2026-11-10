@@ -10,6 +10,8 @@ public class AnimalDragController : MonoBehaviour
     [Header("Referencias")]
     public Camera gameCamera;
     public GridManager gridManager;
+    // Turn and combat systems decide whether a selected unit may act and
+    // whether an occupied destination should be treated as an attack.
     public TurnManager turnManager;
     public CombatSystem combatSystem;
 
@@ -34,7 +36,8 @@ public class AnimalDragController : MonoBehaviour
             gridManager.ground == null)
             return;
 
-        // Seleccionar animal
+        // Select only an idle unit owned by the active player with an unused
+        // movement or attack action.
         if (MouseDown() && selectedAnimal == null)
         {
             Ray ray = gameCamera.ScreenPointToRay(MousePosition());
@@ -63,14 +66,15 @@ public class AnimalDragController : MonoBehaviour
         if (selectedAnimal == null)
             return;
 
-        // Arrastrar animal en el aire
+        // Keep the visual drag separate from grid occupancy until a valid
+        // destination is released.
         if (MouseHeld() &&
             GetMouseWorldPosition(out Vector3 dragPoint))
         {
             selectedAnimal.Grab(dragPoint);
         }
 
-        // Soltar animal en una casilla
+        // An occupied tile is an attack target; an empty tile is a move target.
         if (MouseUp())
         {
             GridNode destination = null;
@@ -102,6 +106,7 @@ public class AnimalDragController : MonoBehaviour
             }
             else
             {
+                // AnimalUnit validates the route and updates grid occupancy.
                 if (selectedAnimal.CanMove())
                 {
                     selectedAnimal.Drop(destination);
@@ -111,6 +116,7 @@ public class AnimalDragController : MonoBehaviour
             }
 
             if (!actionTaken && !selectedAnimal.IsMoving)
+                // Rejected drops return the unit to its registered grid node.
                 selectedAnimal.CancelDrag();
 
             selectedAnimal = null;
@@ -125,6 +131,7 @@ public class AnimalDragController : MonoBehaviour
 
         if (selectedAnimal.CanMove())
         {
+            // Green tiles show reachable empty destinations.
             Gizmos.color = new Color(0.1f, 1f, 0.2f, 0.9f);
             foreach (GridNode node in gridManager.Grid)
             {
@@ -134,6 +141,7 @@ public class AnimalDragController : MonoBehaviour
         }
         else if (selectedAnimal.HasMovedThisTurn && selectedAnimal.CanAttack())
         {
+            // Red tiles show attack range after the unit has moved.
             Gizmos.color = new Color(1f, 0.2f, 0.1f, 0.9f);
             foreach (GridNode node in gridManager.Grid)
             {
@@ -158,6 +166,8 @@ public class AnimalDragController : MonoBehaviour
 
     private bool GetMouseWorldPosition(out Vector3 position)
     {
+        // Project the pointer onto the board plane so empty tiles can be
+        // selected without requiring a collider at the cursor position.
         Ray ray = gameCamera.ScreenPointToRay(MousePosition());
 
         Plane plane = new Plane(

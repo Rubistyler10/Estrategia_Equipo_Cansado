@@ -25,6 +25,9 @@ public class TurnManager : MonoBehaviour
 
     private void Awake()
     {
+        // Scene references are optional: resolving them here keeps the
+        // manager usable when the scene only wires some fields in the
+        // Inspector.
         if (resourceManager == null)
             resourceManager = FindFirstObjectByType<ResourceManager>();
         if (unitSpawner == null)
@@ -35,6 +38,8 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
+        // The button is only one possible way to end a turn; callers can also
+        // invoke EndTurn directly (for example, an AI agent).
         if (endTurnButton != null)
             endTurnButton.onClick.AddListener(EndTurn);
 
@@ -51,6 +56,8 @@ public class TurnManager : MonoBehaviour
         if (unit == null)
             return false;
 
+        // Ownership and the active player are both required. This central
+        // check keeps dragging, spawning, and future actions consistent.
         PlayerOwnership owner = unit.GetComponent<PlayerOwnership>();
         return owner != null && IsPlayersTurn(owner.playerId);
     }
@@ -60,6 +67,8 @@ public class TurnManager : MonoBehaviour
         if (IsGameOver)
             return;
 
+        // Collection happens once when the active player ends their turn,
+        // before control changes to the other player.
         CollectResourcesIfNeeded();
 
         currentPlayerId = currentPlayerId == 1 ? 2 : 1;
@@ -78,6 +87,7 @@ public class TurnManager : MonoBehaviour
         collectedThisTurn = false;
         UpdateTurnUI();
 
+        // Only units owned by the new active player receive fresh actions.
         AnimalUnit[] units =
             FindObjectsByType<AnimalUnit>(FindObjectsSortMode.None);
 
@@ -95,6 +105,8 @@ public class TurnManager : MonoBehaviour
             resourceUI.SetActivePlayer(currentPlayerId);
 
         PlayerTurnAgent ai = currentPlayerId == 1 ? player1AI : player2AI;
+        // A configured agent takes the turn automatically; otherwise the
+        // human end-turn button remains visible.
         if (ai != null)
             ai.PlayTurn(this);
     }
@@ -104,6 +116,8 @@ public class TurnManager : MonoBehaviour
         if (IsGameOver)
             return;
 
+        // Make this idempotent so multiple defeat callbacks cannot overwrite
+        // the original winner.
         IsGameOver = true;
         WinningPlayerId = winningPlayerId;
 
@@ -141,6 +155,8 @@ public class TurnManager : MonoBehaviour
         if (collectedThisTurn || resourceManager == null)
             return;
 
+        // Resource collection is intentionally first-match only: one unit
+        // standing on one resource zone grants one collection per turn.
         AnimalUnit[] units =
             FindObjectsByType<AnimalUnit>(FindObjectsSortMode.None);
 

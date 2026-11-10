@@ -10,6 +10,8 @@ public class UnitSpawner : MonoBehaviour
     [Header("Puntos de aparicion")]
     public Transform spawnJugador1;
     public Transform spawnJugador2;
+    // Bases are preferred spawn origins; the original spawn points remain
+    // fallbacks for scenes without bases.
     public PlayerBase baseJugador1;
     public PlayerBase baseJugador2;
 
@@ -39,6 +41,7 @@ public class UnitSpawner : MonoBehaviour
             resourceManager =
                 FindFirstObjectByType<ResourceManager>();
 
+        // Cache bases once because this lookup is only needed during setup.
         PlayerBase[] bases =
             FindObjectsByType<PlayerBase>(FindObjectsSortMode.None);
 
@@ -83,6 +86,8 @@ public class UnitSpawner : MonoBehaviour
 
         Transform spawn = playerId == 1
             ? spawnJugador1 : spawnJugador2;
+        // Recruiting from the base ties newly created units to the owning
+        // player's starting area.
         PlayerBase playerBase = playerId == 1
             ? baseJugador1 : baseJugador2;
 

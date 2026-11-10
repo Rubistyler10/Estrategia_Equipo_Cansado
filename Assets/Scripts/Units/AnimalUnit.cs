@@ -225,7 +225,7 @@ public void Drop(GridNode destination)
     public bool CanMove()
     {
         // A unit may move once per turn and cannot overlap another animation.
-        return !IsDead && !HasMovedThisTurn && !IsMoving;
+        return !IsDead && !HasMovedThisTurn && !HasAttackedThisTurn && !IsMoving;
     }
 
     public bool CanAttack()

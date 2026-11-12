@@ -72,11 +72,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimalUnit
   animalType: 1
   gridManager: {fileID: 0}
+  pathfinding: {fileID: 0}
   animator: {fileID: 2076315300116798808}
   idleState: Idle
   walkState: Walk
   runState: Run
-  groundOffset: 0.95
+  deathState: Die
+  deathAnimationDuration: 1
+  groundOffset: 0.25
   liftHeight: 0.6
   walkSpeed: 1.5
   movementPoints: 1

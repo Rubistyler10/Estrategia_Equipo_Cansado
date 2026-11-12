@@ -43482,7 +43482,7 @@ GameObject:
   m_Component:
   - component: {fileID: 337390688}
   m_Layer: 0
-  m_Name: Agua_Exterior
+  m_Name: Agua
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43497,7 +43497,7 @@ Transform:
   m_GameObject: {fileID: 337390687}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -114222,6 +114222,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 868783289}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &870078466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 870078467}
+  m_Layer: 0
+  m_Name: CameraRig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &870078467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870078466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.29673585, y: 14.044405, z: -0.13152514}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1828255432}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &870172768
 GameObject:
   m_ObjectHideFlags: 0
@@ -136088,7 +136120,7 @@ Camera:
   m_GameObject: {fileID: 1045875808}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -136139,11 +136171,11 @@ Transform:
   m_GameObject: {fileID: 1045875808}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071069, y: 8.881784e-16, z: -2.1094237e-15, w: 0.70710677}
-  m_LocalPosition: {x: -0.29673585, y: 14.044405, z: -0.13152514}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1828255432}
   m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
 --- !u!114 &1045875812
 MonoBehaviour:
@@ -226421,6 +226453,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825985471}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1828255431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1828255432}
+  m_Layer: 0
+  m_Name: CameraPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1828255432
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828255431}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1045875811}
+  m_Father: {fileID: 870078467}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1829951111
 GameObject:
   m_ObjectHideFlags: 0
@@ -265456,7 +265520,7 @@ Transform:
   m_GameObject: {fileID: 2300000001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.45, y: 0.75, z: -17.48}
+  m_LocalPosition: {x: -17.45, y: 0.5, z: -17.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -265584,7 +265648,7 @@ Transform:
   m_GameObject: {fileID: 2300000011}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.51, y: 0.75, z: 17.52}
+  m_LocalPosition: {x: 17.51, y: 0.5, z: 17.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -265699,10 +265763,6 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
-    - target: {fileID: 3425257189567077349, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
-      propertyPath: groundOffset
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 4128288370996714323, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.6
@@ -265768,10 +265828,6 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
-    - target: {fileID: 825078127193299527, guid: bd790c459ad948e4da2ab5b241bf95fa, type: 3}
-      propertyPath: groundOffset
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 2241985062978645317, guid: bd790c459ad948e4da2ab5b241bf95fa, type: 3}
       propertyPath: m_Name
       value: UNIDAD_GORILA
@@ -265843,7 +265899,7 @@ PrefabInstance:
       objectReference: {fileID: 1490624898}
     - target: {fileID: 1367521436120472719, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: groundOffset
-      value: 0.25
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -265851,7 +265907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -265948,7 +266004,7 @@ PrefabInstance:
       objectReference: {fileID: 1490624898}
     - target: {fileID: 3025024044737192340, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
       propertyPath: groundOffset
-      value: 0.25
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 3841327927142387608, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
       propertyPath: m_Name
@@ -265975,10 +266031,6 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
-    - target: {fileID: 2422147882190899898, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
-      propertyPath: groundOffset
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 5922607625655625514, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
       propertyPath: m_Name
       value: UNIDAD_TIGRE
@@ -266032,7 +266084,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1045875811}
+  - {fileID: 870078467}
   - {fileID: 286353930}
   - {fileID: 1907489415}
   - {fileID: 1490624897}

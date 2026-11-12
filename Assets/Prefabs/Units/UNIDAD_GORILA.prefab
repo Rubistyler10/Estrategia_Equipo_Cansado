@@ -79,7 +79,7 @@ MonoBehaviour:
   runState: Run
   deathState: Die
   deathAnimationDuration: 1
-  groundOffset: 0.25
+  groundOffset: 0.2
   liftHeight: 0.6
   walkSpeed: 1.5
   movementPoints: 2

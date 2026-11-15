@@ -16,6 +16,7 @@ public class AnimalDragController : MonoBehaviour
     public CombatSystem combatSystem;
 
     private AnimalUnit selectedAnimal;
+    public AnimalUnit SelectedAnimal => selectedAnimal;
 
     private void Start()
     {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2842153814366642875}
   - component: {fileID: 825078127193299527}
   - component: {fileID: 2970158580546697340}
+  - component: {fileID: 2798709657061552126}
   m_Layer: 0
   m_Name: UNIDAD_GORILA
   m_TagString: Untagged
@@ -104,6 +105,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
   playerId: 2
+--- !u!114 &2798709657061552126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241985062978645317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12666ddd1b1b1be48b9856cdf5fefb78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalHealthRing
+  radiusInCells: 0.42
+  lineWidthInCells: 0.08
+  heightOffset: 0.04
+  player1Color: {r: 0.1, g: 0.55, b: 1, a: 1}
+  player2Color: {r: 1, g: 0.15, b: 0.2, a: 1}
+  backgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 1}
+  segments: 64
 --- !u!1001 &5607345535329332233
 PrefabInstance:
   m_ObjectHideFlags: 0

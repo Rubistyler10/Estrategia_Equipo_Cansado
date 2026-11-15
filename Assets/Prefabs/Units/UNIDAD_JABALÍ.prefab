@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6715919270568531983}
   - component: {fileID: 3025024044737192340}
   - component: {fileID: 8208717902111558288}
+  - component: {fileID: -7310758338800805616}
   m_Layer: 0
   m_Name: "UNIDAD_JABAL\xCD"
   m_TagString: Untagged
@@ -104,6 +105,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOwnership
   playerId: 1
+--- !u!114 &-7310758338800805616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3841327927142387608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12666ddd1b1b1be48b9856cdf5fefb78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimalHealthRing
+  radiusInCells: 0.42
+  lineWidthInCells: 0.08
+  heightOffset: 0.04
+  player1Color: {r: 0.1, g: 0.55, b: 1, a: 1}
+  player2Color: {r: 1, g: 0.15, b: 0.2, a: 1}
+  backgroundColor: {r: 0.12, g: 0.12, b: 0.12, a: 1}
+  segments: 64
 --- !u!1001 &5141012873562482265
 PrefabInstance:
   m_ObjectHideFlags: 0

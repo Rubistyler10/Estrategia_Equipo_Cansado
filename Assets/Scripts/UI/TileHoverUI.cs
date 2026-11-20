@@ -96,7 +96,7 @@ public class TileHoverUI : MonoBehaviour
         }
 
         GridNode node = gridManager.GetNodeFromWorldPosition(worldPosition);
-        if (node == null)
+        if (node == null || !node.isWalkable)
         {
             HideHighlight();
             return;

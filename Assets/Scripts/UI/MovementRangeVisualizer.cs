@@ -162,7 +162,9 @@ public class MovementRangeVisualizer : MonoBehaviour
     private void UpdateDragPreview(AnimalUnit unit)
     {
         if (casillaPrevisualizacion == null || IsOverUI() ||
-            !TryGetBoardNode(out GridNode target) || target == unit.CurrentNode)
+            !TryGetBoardNode(out GridNode target) ||
+            target == unit.CurrentNode ||
+            !target.isWalkable)
         {
             previewCell.enabled = false;
             return;

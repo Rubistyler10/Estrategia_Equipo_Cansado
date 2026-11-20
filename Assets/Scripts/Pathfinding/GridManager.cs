@@ -72,7 +72,7 @@ public class GridManager : MonoBehaviour
                     halfExtents,
                     Quaternion.identity,
                     obstacleMask,
-                    QueryTriggerInteraction.Ignore //evitar que los colliders marcados como triggers cuenten como obstáculos
+                    QueryTriggerInteraction.Collide //evitar que los colliders marcados como triggers cuenten como obstáculos
                 );
 
 

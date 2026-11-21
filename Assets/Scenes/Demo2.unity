@@ -137118,7 +137118,7 @@ MonoBehaviour:
   zoomSmoothness: 7
   rotationSensitivity: 0.18
   rotationSmoothness: 9
-  minPitch: 35
+  minPitch: 55
   maxPitch: 75
   focusOnSelection: 1
   followMovingUnit: 1

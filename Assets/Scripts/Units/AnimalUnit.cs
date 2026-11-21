@@ -34,6 +34,10 @@ public class AnimalUnit : MonoBehaviour
     public float liftHeight = 0.6f;
     public float walkSpeed = 1.5f;
 
+    [Header("Cocodrilo - Agua")]
+    public float crocodileWaterOffset = 0f;
+    public float crocodileJumpHeight = 0.35f;
+
     [Header("Estadisticas de movimiento")]
     // These values are configured per prefab rather than inferred from the
     // animal type, making balancing possible without code changes.
@@ -64,11 +68,20 @@ public class AnimalUnit : MonoBehaviour
     private Coroutine deathRoutine;
     private string currentAnimation = "";
 
+
     private Vector3 GetGroundPosition(GridNode node)
     {
-        return node.worldPosition +
-               Vector3.up * groundOffset;
+        float offset = groundOffset;
+
+        if (animalType == AnimalType.Cocodrilo &&
+            node.terrainType == TerrainType.Water)
+        {
+            offset = crocodileWaterOffset;
+        }
+
+        return node.worldPosition + Vector3.up * offset;
     }
+
 
     private void Start()
     {
@@ -298,37 +311,69 @@ public void Drop(GridNode destination)
     }
 
 
-    
-private IEnumerator WalkAlongPath(List<GridNode> path)
-{
-    PlayAnimation(walkState);
-
-    // Empezamos en 1 porque el nodo 0 es el origen.
-    for (int i = 1; i < path.Count; i++)
+    private IEnumerator WalkAlongPath(List<GridNode> path)
     {
-        Vector3 targetPosition =
-            GetGroundPosition(path[i]);
+        PlayAnimation(walkState);
 
-        while (Vector3.Distance(
-            transform.position,
-            targetPosition) > 0.01f)
+        for (int i = 1; i < path.Count; i++)
         {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                targetPosition,
-                walkSpeed * Time.deltaTime
-            );
+            GridNode previous = path[i - 1];
+            GridNode next = path[i];
 
-            yield return null;
+            Vector3 start = transform.position;
+            Vector3 target = GetGroundPosition(next);
+
+            bool waterTransition =
+                animalType == AnimalType.Cocodrilo &&
+                (previous.terrainType == TerrainType.Water) !=
+                (next.terrainType == TerrainType.Water);
+
+            if (waterTransition)
+            {
+                float duration = Vector3.Distance(start, target) /
+                    Mathf.Max(0.1f, walkSpeed);
+
+                duration = Mathf.Max(0.2f, duration);
+
+                float elapsed = 0f;
+
+                while (elapsed < duration)
+                {
+                    elapsed += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsed / duration);
+
+                    Vector3 position =
+                        Vector3.Lerp(start, target, t);
+
+                    // Arco del salto: sube y vuelve a bajar.
+                    position.y += Mathf.Sin(t * Mathf.PI) *
+                        crocodileJumpHeight;
+
+                    transform.position = position;
+                    yield return null;
+                }
+            }
+            else
+            {
+                while (Vector3.Distance(
+                    transform.position, target) > 0.01f)
+                {
+                    transform.position = Vector3.MoveTowards(
+                        transform.position,
+                        target,
+                        walkSpeed * Time.deltaTime);
+
+                    yield return null;
+                }
+            }
+
+            transform.position = target;
         }
 
-        transform.position = targetPosition;
+        walkRoutine = null;
+        PlayAnimation(idleState);
     }
 
-    walkRoutine = null;
-
-    PlayAnimation(idleState);
-}
 
     private IEnumerator AttackBumpRoutine(Vector3 targetPosition)
     {

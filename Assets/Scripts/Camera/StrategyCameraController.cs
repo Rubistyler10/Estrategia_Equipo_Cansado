@@ -56,6 +56,32 @@ public class StrategyCameraController : MonoBehaviour
     private AnimalUnit trackedUnit;
     private bool ignoreSelectionUntilRelease;
 
+
+    [Header("Presentacion inicial")]
+    public float initialOverviewDistance = 55f;
+
+    private bool externalInputLocked;
+
+    public void SetInputLocked(bool locked)
+    {
+        externalInputLocked = locked;
+    }
+
+    public void FocusOnPlayer(int playerId)
+    {
+        trackedUnit = null;
+        ignoreSelectionUntilRelease = true;
+
+        targetFocus = GetPlayerFocus(playerId);
+
+        zoomIndex = Mathf.Clamp(
+            startingZoomIndex, 0, zoomLevels.Length - 1);
+
+        targetDistance = zoomLevels[zoomIndex];
+        previousPlayer = playerId;
+    }
+    
+
     private void Start()
     {
         cam = GetComponent<Camera>();
@@ -88,23 +114,22 @@ public class StrategyCameraController : MonoBehaviour
         currentPitch = targetPitch = Mathf.Clamp(
             transform.eulerAngles.x, minPitch, maxPitch);
 
-        currentDistance = targetDistance = zoomLevels[zoomIndex];
+        currentDistance = targetDistance = initialOverviewDistance; // currentDistance = targetDistance = zoomLevels[zoomIndex];
 
         currentFocus = targetFocus =
             gridManager.ground.position;
 
         if (turnManager != null)
-        {
             previousPlayer = turnManager.currentPlayerId;
-            currentFocus = targetFocus =
-                GetPlayerFocus(previousPlayer);
-        }
 
         ApplyCameraTransform();
     }
 
     private void LateUpdate()
     {
+        if (externalInputLocked)
+            return;
+        
         CheckTurnChange();
 
         Vector2 movement = ReadMovement();

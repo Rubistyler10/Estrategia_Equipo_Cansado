@@ -95,12 +95,34 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: IA LOGO UJI WW_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 723
+        height: 462
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf54a198471361745abfa8c02a0c0efd
+      internalID: -127427008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6b8cc90c74d5ed44a9d4fb462e9c22f0
     internalID: 0
     vertices: []
     indices: 
@@ -108,8 +130,30 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
-    nameFileIdTable: {}
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      IA LOGO UJI WW_0: -127427008
+      IA LOGO UJI WW_1: -751341669
+      IA LOGO UJI WW_10: -468180324
+      IA LOGO UJI WW_11: 1437525700
+      IA LOGO UJI WW_12: -303422053
+      IA LOGO UJI WW_13: 593361513
+      IA LOGO UJI WW_14: 1922801803
+      IA LOGO UJI WW_15: 1118388267
+      IA LOGO UJI WW_16: -1874487931
+      IA LOGO UJI WW_17: -133109858
+      IA LOGO UJI WW_18: -730064439
+      IA LOGO UJI WW_19: -1185585599
+      IA LOGO UJI WW_2: 1794879628
+      IA LOGO UJI WW_3: -209900403
+      IA LOGO UJI WW_4: 1137414623
+      IA LOGO UJI WW_5: -1393150810
+      IA LOGO UJI WW_6: -1426804422
+      IA LOGO UJI WW_7: 653648752
+      IA LOGO UJI WW_8: -61314168
+      IA LOGO UJI WW_9: 1852875717
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

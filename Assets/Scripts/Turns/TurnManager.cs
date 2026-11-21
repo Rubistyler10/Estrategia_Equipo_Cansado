@@ -4,6 +4,13 @@ using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
+    [Header("Inicio de partida")]
+    public bool randomStartingPlayer = true;
+
+    [Range(1, 2)]
+    public int fixedStartingPlayer = 1;
+    private int firstPlayerId;     
+    
     [Header("Referencias")]
     public ResourceManager resourceManager;
     public UnitSpawner unitSpawner;
@@ -28,6 +35,14 @@ public class TurnManager : MonoBehaviour
         // Scene references are optional: resolving them here keeps the
         // manager usable when the scene only wires some fields in the
         // Inspector.
+
+        currentPlayerId = randomStartingPlayer
+            ? Random.Range(1, 3)
+            : fixedStartingPlayer;
+
+        firstPlayerId = currentPlayerId;
+        turnNumber = 1;
+
         if (resourceManager == null)
             resourceManager = FindFirstObjectByType<ResourceManager>();
         if (unitSpawner == null)
@@ -72,7 +87,8 @@ public class TurnManager : MonoBehaviour
         CollectResourcesIfNeeded();
 
         currentPlayerId = currentPlayerId == 1 ? 2 : 1;
-        if (currentPlayerId == 1)
+
+        if (currentPlayerId == firstPlayerId) // To avoid turnNumber increase when player 2 starts, if player 2 starts the game
             turnNumber++;
 
         BeginTurn(currentPlayerId);

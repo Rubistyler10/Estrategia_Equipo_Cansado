@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,6 +18,12 @@ public class StrategyCameraController : MonoBehaviour
     public float shiftMultiplier = 2.5f;
     public float positionSmoothness = 6f;
     public float edgeMargin = 1f;
+
+    [Header("Arrastre con rueda del raton")]
+    [Min(0f)] public float middlePanSensitivity = 1f;
+    private bool middleWasHeld;
+    private bool middlePanning;
+    private Vector2 lastPanMouse;
 
     [Header("Zoom por niveles")]
     public float[] zoomLevels = { 9f, 13f, 18f, 24f, 30f };
@@ -108,23 +113,30 @@ public class StrategyCameraController : MonoBehaviour
         CheckTurnChange();
 
         Vector2 movement = ReadMovement();
-        bool manualMovement = movement.sqrMagnitude > 0.001f;
+        Vector3 mousePan = ReadMiddlePan();
+        bool keyboardMoving = movement.sqrMagnitude > 0.001f;
 
-        if (manualMovement)
+        if (keyboardMoving || middlePanning)
         {
-            // El jugador recupera el control manual.
+            // Los controles manuales cancelan el seguimiento cinematico.
             trackedUnit = null;
             ignoreSelectionUntilRelease = true;
+            targetDistance = zoomLevels[zoomIndex];
 
-            float speed = moveSpeed *
-                (IsShiftPressed() ? shiftMultiplier : 1f);
+            if (keyboardMoving)
+            {
+                float speed = moveSpeed *
+                    (IsShiftPressed() ? shiftMultiplier : 1f);
 
-            Vector3 direction =
-                Quaternion.Euler(0f, targetYaw, 0f) *
-                new Vector3(movement.x, 0f, movement.y);
+                Vector3 direction =
+                    Quaternion.Euler(0f, targetYaw, 0f) *
+                    new Vector3(movement.x, 0f, movement.y);
 
-            targetFocus += direction.normalized *
-                speed * Time.unscaledDeltaTime;
+                targetFocus += direction.normalized *
+                    speed * Time.unscaledDeltaTime;
+            }
+
+            targetFocus += mousePan;
         }
 
         if (dragController == null ||
@@ -146,7 +158,7 @@ public class StrategyCameraController : MonoBehaviour
             targetDistance = zoomLevels[zoomIndex];
         }
 
-        if (IsRightMousePressed() && !IsPointerOverUI())
+        if (!middlePanning && IsRightMousePressed() && !IsPointerOverUI())
         {
             Vector2 delta = ReadMouseDelta();
 
@@ -195,9 +207,7 @@ public class StrategyCameraController : MonoBehaviour
 
         targetFocus = GetPlayerFocus(previousPlayer);
 
-        zoomIndex = Mathf.Clamp(
-            startingZoomIndex, 0, zoomLevels.Length - 1);
-
+        // Conservar el ultimo nivel elegido manualmente.
         targetDistance = zoomLevels[zoomIndex];
     }
 
@@ -321,6 +331,77 @@ public class StrategyCameraController : MonoBehaviour
         transform.rotation = rotation;
         transform.position = currentFocus -
             rotation * Vector3.forward * currentDistance;
+    }
+
+    private Vector3 ReadMiddlePan()
+    {
+        bool held = IsMiddleMousePressed();
+        Vector2 mouse = ReadMousePosition();
+
+        if (!held)
+        {
+            middleWasHeld = false;
+            middlePanning = false;
+            return Vector3.zero;
+        }
+
+        if (!middleWasHeld)
+        {
+            middleWasHeld = true;
+            middlePanning = !IsPointerOverUI();
+            lastPanMouse = mouse;
+
+            if (middlePanning)
+                targetFocus = currentFocus;
+
+            return Vector3.zero;
+        }
+
+        if (!middlePanning)
+            return Vector3.zero;
+
+        Plane plane = new Plane(Vector3.up,
+            gridManager.ground.position);
+
+        Ray previousRay = cam.ScreenPointToRay(lastPanMouse);
+        Ray currentRay = cam.ScreenPointToRay(mouse);
+        lastPanMouse = mouse;
+
+        if (plane.Raycast(previousRay, out float previousHit) &&
+            plane.Raycast(currentRay, out float currentHit))
+        {
+            Vector3 delta = previousRay.GetPoint(previousHit) -
+                currentRay.GetPoint(currentHit);
+            delta.y = 0f;
+            return delta * middlePanSensitivity;
+        }
+
+        return Vector3.zero;
+    }
+
+    private static bool IsMiddleMousePressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Mouse.current != null &&
+            Mouse.current.middleButton.isPressed;
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        return Input.GetMouseButton(2);
+#else
+        return false;
+#endif
+    }
+
+    private static Vector2 ReadMousePosition()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Mouse.current != null
+            ? Mouse.current.position.ReadValue()
+            : Vector2.zero;
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        return Input.mousePosition;
+#else
+        return Vector2.zero;
+#endif
     }
 
     private static bool IsPointerOverUI()

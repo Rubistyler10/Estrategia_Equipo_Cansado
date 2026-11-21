@@ -38,6 +38,7 @@ Material:
     - _Sand_Blend_Offset: -0.5
     - _Sand_Contrast: 5.76
     - _Sand_Normal_Scale: 17.9
+    - _TopGrass: 0
     - _TopSand: 1
     - _TopSnow: 0
     m_Colors: []

@@ -9,12 +9,13 @@ public class UnitCreationUI : MonoBehaviour
     public UnitSpawner unitSpawner;
     public ResourceManager resourceManager;
     public ResourceUI resourceUI;
+
     // Prevent this player's recruitment controls from being used during the
     // opposing player's turn.
     public TurnManager turnManager;
 
     [Header("Panel")]
-    public GameObject panelCrearUnidad;
+    public HUDSwitcher hudSwitcher;
     public Button botonAbrir;
     public Button botonCerrar;
 
@@ -44,21 +45,25 @@ public class UnitCreationUI : MonoBehaviour
 
         botonCamello.onClick.AddListener(
             () => CrearAnimal(AnimalType.Camello));
-
-        panelCrearUnidad.SetActive(false);
     }
 
     private void Update()
     {
-        if (!panelCrearUnidad.activeSelf)
+        if (hudSwitcher == null ||
+            hudSwitcher.hudReclutarUnidad == null ||
+            !hudSwitcher.hudReclutarUnidad.activeSelf)
             return;
 
         int playerId = resourceUI.activePlayer;
-        // The panel may remain open across a turn change, so stop updating it
-        // as soon as it no longer belongs to the active player.
+
+        // The panel may remain open across a turn change.
         if (turnManager != null &&
             !turnManager.IsPlayersTurn(playerId))
+        {
+            CerrarPanel();
             return;
+        }
+
         int food = resourceManager.GetFood(playerId);
 
         botonJabali.interactable =
@@ -79,12 +84,18 @@ public class UnitCreationUI : MonoBehaviour
 
     public void AbrirPanel()
     {
-        panelCrearUnidad.SetActive(true);
+        if (hudSwitcher == null)
+            return;
+
+        hudSwitcher.MostrarHUDReclutar();
     }
 
     public void CerrarPanel()
     {
-        panelCrearUnidad.SetActive(false);
+        if (hudSwitcher == null)
+            return;
+
+        hudSwitcher.MostrarHUDJugar();
     }
 
     private void CrearAnimal(AnimalType tipo)

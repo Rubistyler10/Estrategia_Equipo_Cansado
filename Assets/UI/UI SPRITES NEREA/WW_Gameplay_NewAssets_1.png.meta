@@ -189,7 +189,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 582
-        y: 367
+        y: 328
         width: 740
         height: 270
       alignment: 0
@@ -255,7 +255,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 56
-        y: 38
+        y: 39
         width: 317
         height: 214
       alignment: 0
@@ -268,6 +268,50 @@ TextureImporter:
       bones: []
       spriteID: 4c6c7a946a35f4f4f9e0180fadbfc9a5
       internalID: -869266325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WW_Gameplay_NewAssets_1_1
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 919
+        width: 94
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6385cfe12843336408824d59543cf97e
+      internalID: -1229138355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WW_Gameplay_NewAssets_1_3
+      rect:
+        serializedVersion: 2
+        x: 1450
+        y: 917
+        width: 94
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d3893ed36722b04aae833cb538ee4dd
+      internalID: -1216281083
       vertices: []
       indices: 
       edges: []
@@ -286,7 +330,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1920.0,"y":1080.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       WW_Gameplay_NewAssets_1_0: 1336726183
       WW_Gameplay_NewAssets_1_1: -1229138355

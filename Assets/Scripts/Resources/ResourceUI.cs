@@ -55,9 +55,7 @@ public class ResourceUI : MonoBehaviour
 
         int food = resourceManager.GetFood(activePlayer);
 
-        textoAlimentos.text =
-            "Jugador " + activePlayer +
-            " - Alimentos: " + food;
+        textoAlimentos.text = food.ToString();
 
         lastPlayer = activePlayer;
         lastFood = food;

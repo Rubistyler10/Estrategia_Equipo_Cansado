@@ -1,4 +1,6 @@
+
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
@@ -14,19 +16,21 @@ public class TileHoverUI : MonoBehaviour
     public GridManager gridManager;
     public TMP_Text textoTerreno;
 
-    [Header("Resaltado amarillo")]
+    [Header("Resaltado de casilla")]
     public float heightAboveNode = 1f;
+
     [Range(0.5f, 1f)]
     public float cellFill = 0.95f;
 
     [Header("Panel de informacion")]
     public GameObject panelInfoTerreno;
+    public Image imagenPanelTerreno;
 
-    [Header("GameObjects con los sprites de terreno")]
-    public GameObject imagenLlanura;
-    public GameObject imagenDesierto;
-    public GameObject imagenNieve;
-    public GameObject imagenAgua;
+    [Header("Sprites de terreno")]
+    public Sprite spriteLlanura;
+    public Sprite spriteDesierto;
+    public Sprite spriteNieve;
+    public Sprite spriteAgua;
 
     private SpriteRenderer highlight;
     private GridNode currentNode;
@@ -41,27 +45,31 @@ public class TileHoverUI : MonoBehaviour
 
         highlight = GetComponent<SpriteRenderer>();
 
-        OcultarImagenes();
         HideHighlight();
 
         if (highlight.sprite == null)
         {
-            Debug.LogError("Falta el sprite amarillo en TileHoverIndicator.");
+            Debug.LogError(
+                "Falta el sprite de resaltado en TileHoverIndicator."
+            );
+
             enabled = false;
         }
     }
 
     private void Update()
     {
-        if (gameCamera == null || gridManager == null ||
-            gridManager.Grid == null || gridManager.ground == null)
+        if (gameCamera == null ||
+            gridManager == null ||
+            gridManager.Grid == null ||
+            gridManager.ground == null)
         {
             HideHighlight();
             return;
         }
 
-        // El panel informativo debe tener CanvasGroup con
-        // Blocks Raycasts desactivado para no interceptar el cursor.
+        // Evitar detectar terrenos cuando el cursor
+        // esta sobre elementos interactivos de la UI.
         if (EventSystem.current != null &&
             EventSystem.current.IsPointerOverGameObject())
         {
@@ -71,7 +79,8 @@ public class TileHoverUI : MonoBehaviour
 
         Vector2 mousePosition = GetMousePosition();
 
-        if (mousePosition.x < 0f || mousePosition.y < 0f ||
+        if (mousePosition.x < 0f ||
+            mousePosition.y < 0f ||
             mousePosition.x >= Screen.width ||
             mousePosition.y >= Screen.height)
         {
@@ -80,7 +89,11 @@ public class TileHoverUI : MonoBehaviour
         }
 
         Ray ray = gameCamera.ScreenPointToRay(mousePosition);
-        Plane plane = new Plane(Vector3.up, gridManager.ground.position);
+
+        Plane plane = new Plane(
+            Vector3.up,
+            gridManager.ground.position
+        );
 
         if (!plane.Raycast(ray, out float distance))
         {
@@ -89,13 +102,17 @@ public class TileHoverUI : MonoBehaviour
         }
 
         Vector3 worldPosition = ray.GetPoint(distance);
+
         if (!IsInsideBoard(worldPosition))
         {
             HideHighlight();
             return;
         }
 
-        GridNode node = gridManager.GetNodeFromWorldPosition(worldPosition);
+        GridNode node =
+            gridManager.GetNodeFromWorldPosition(worldPosition);
+
+        // No mostrar terreno sobre casillas bloqueadas.
         if (node == null || !node.isWalkable)
         {
             HideHighlight();
@@ -110,11 +127,16 @@ public class TileHoverUI : MonoBehaviour
         if (highlight == null || highlight.sprite == null)
             return;
 
+        // Resaltar la casilla.
         highlight.enabled = true;
-        transform.position = node.worldPosition + Vector3.up * heightAboveNode;
+
+        transform.position =
+            node.worldPosition + Vector3.up * heightAboveNode;
 
         float desiredSize = gridManager.cellSize * cellFill;
+
         Vector2 spriteSize = highlight.sprite.bounds.size;
+
         if (spriteSize.x > 0f && spriteSize.y > 0f)
         {
             transform.localScale = new Vector3(
@@ -124,43 +146,58 @@ public class TileHoverUI : MonoBehaviour
             );
         }
 
-        // Solo actualizar el texto y los GameObjects si cambia la casilla.
+        // Actualizar solo cuando cambia la casilla.
         if (currentNode != node)
         {
             currentNode = node;
 
             if (textoTerreno != null)
-                textoTerreno.text = GetTerrainName(node.terrainType);
+            {
+                textoTerreno.text =
+                    GetTerrainName(node.terrainType);
+            }
 
             MostrarImagenTerreno(node.terrainType);
         }
 
-        if (panelInfoTerreno != null && !panelInfoTerreno.activeSelf)
+        // Mostrar panel.
+        if (panelInfoTerreno != null &&
+            !panelInfoTerreno.activeSelf)
+        {
             panelInfoTerreno.SetActive(true);
+        }
     }
 
     private void MostrarImagenTerreno(TerrainType tipo)
     {
-        // Cada imagen conserva su sprite, RectTransform y escala originales.
-        if (imagenLlanura != null)
-            imagenLlanura.SetActive(tipo == TerrainType.Plain);
+        if (imagenPanelTerreno == null)
+            return;
 
-        if (imagenDesierto != null)
-            imagenDesierto.SetActive(tipo == TerrainType.Desert);
+        Sprite nuevoSprite = null;
 
-        if (imagenNieve != null)
-            imagenNieve.SetActive(tipo == TerrainType.Snow);
+        switch (tipo)
+        {
+            case TerrainType.Plain:
+                nuevoSprite = spriteLlanura;
+                break;
 
-        if (imagenAgua != null)
-            imagenAgua.SetActive(tipo == TerrainType.Water);
-    }
+            case TerrainType.Desert:
+                nuevoSprite = spriteDesierto;
+                break;
 
-    private void OcultarImagenes()
-    {
-        if (imagenLlanura != null) imagenLlanura.SetActive(false);
-        if (imagenDesierto != null) imagenDesierto.SetActive(false);
-        if (imagenNieve != null) imagenNieve.SetActive(false);
-        if (imagenAgua != null) imagenAgua.SetActive(false);
+            case TerrainType.Snow:
+                nuevoSprite = spriteNieve;
+                break;
+
+            case TerrainType.Water:
+                nuevoSprite = spriteAgua;
+                break;
+        }
+
+        if (imagenPanelTerreno.sprite != nuevoSprite)
+        {
+            imagenPanelTerreno.sprite = nuevoSprite;
+        }
     }
 
     private void HideHighlight()
@@ -168,8 +205,11 @@ public class TileHoverUI : MonoBehaviour
         if (highlight != null)
             highlight.enabled = false;
 
-        if (panelInfoTerreno != null && panelInfoTerreno.activeSelf)
+        if (panelInfoTerreno != null &&
+            panelInfoTerreno.activeSelf)
+        {
             panelInfoTerreno.SetActive(false);
+        }
 
         currentNode = null;
     }
@@ -177,8 +217,12 @@ public class TileHoverUI : MonoBehaviour
     private bool IsInsideBoard(Vector3 point)
     {
         Vector3 center = gridManager.ground.position;
-        float halfWidth = gridManager.width * gridManager.cellSize / 2f;
-        float halfDepth = gridManager.depth * gridManager.cellSize / 2f;
+
+        float halfWidth =
+            gridManager.width * gridManager.cellSize / 2f;
+
+        float halfDepth =
+            gridManager.depth * gridManager.cellSize / 2f;
 
         return point.x >= center.x - halfWidth &&
                point.x < center.x + halfWidth &&
@@ -190,11 +234,20 @@ public class TileHoverUI : MonoBehaviour
     {
         switch (type)
         {
-            case TerrainType.Plain: return "Llanura";
-            case TerrainType.Desert: return "Desierto";
-            case TerrainType.Snow: return "Nieve";
-            case TerrainType.Water: return "Agua";
-            default: return "Desconocido";
+            case TerrainType.Plain:
+                return "Llanura";
+
+            case TerrainType.Desert:
+                return "Desierto";
+
+            case TerrainType.Snow:
+                return "Nieve";
+
+            case TerrainType.Water:
+                return "Agua";
+
+            default:
+                return "Desconocido";
         }
     }
 
@@ -204,8 +257,10 @@ public class TileHoverUI : MonoBehaviour
         return Mouse.current != null
             ? Mouse.current.position.ReadValue()
             : new Vector2(-1f, -1f);
+
 #elif ENABLE_LEGACY_INPUT_MANAGER
         return Input.mousePosition;
+
 #else
         return new Vector2(-1f, -1f);
 #endif

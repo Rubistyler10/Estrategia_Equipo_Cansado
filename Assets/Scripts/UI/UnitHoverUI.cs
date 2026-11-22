@@ -19,6 +19,7 @@ public class UnitHoverUI : MonoBehaviour
     public TMP_Text textoNombre;
     public TMP_Text textoVida;
     public TMP_Text textoMovimiento;
+    public TMP_Text textoAtaque;
     public Image imagenRetrato;
 
     [Header("Retratos (opcional)")]
@@ -150,11 +151,15 @@ public class UnitHoverUI : MonoBehaviour
 
         // La vida puede cambiar sin que el cursor abandone el animal.
         if (textoVida != null)
-            textoVida.text = "PV " + unidad.CurrentHealth +
-                             " / " + unidad.maxHealth;
+            textoVida.text = unidad.CurrentHealth + "/" + unidad.maxHealth;
 
+        // Puntos de movimiento
         if (textoMovimiento != null)
-            textoMovimiento.text = "Mov " + unidad.movementPoints;
+            textoMovimiento.text = unidad.movementPoints.ToString();
+
+        // Estadística de ataque
+        if (textoAtaque != null)
+            textoAtaque.text = unidad.attack.ToString();
     }
 
     private void OcultarPanel()

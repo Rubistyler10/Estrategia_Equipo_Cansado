@@ -45,8 +45,8 @@ public class TurnUI : MonoBehaviour
 
         if (textoAlimentos != null && resourceManager != null)
         {
-            textoAlimentos.text =
-                "Alimentos: " + resourceManager.GetFood(jugador);
+        textoAlimentos.text =
+            resourceManager.GetFood(jugador).ToString();
         }
     }
 }

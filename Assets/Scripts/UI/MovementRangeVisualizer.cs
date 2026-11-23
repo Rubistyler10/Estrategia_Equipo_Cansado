@@ -19,20 +19,22 @@ public class MovementRangeVisualizer : MonoBehaviour
     public GridManager gridManager;
     public AnimalDragController dragController;
 
-    [Header("Sprites recortados de HOJA_COMPLETA")]
+    [Header("Sprites de alcance de Nerea")]
     public Sprite casillaMovimientoAzul;
     public Sprite casillaMovimientoRoja;
-    public Sprite casillaPrevisualizacion; // Casilla_Hover_Amarillo
+
+    [Header("Sprites de destino durante el arrastre")]
+    public Sprite casillaDestinoValido;   // WW_Casilla_Cursor_SI
+    public Sprite casillaDestinoInvalido; // WW_Casilla_Cursor_No
+    public Sprite casillaPrevisualizacion; // Respaldo para ataque valido (marco dorado)
 
     [Header("Posicion de las casillas")]
     [Range(0.6f, 1f)] public float cellFill = 0.94f;
     public float heightAboveNode = 1.03f;
     [Range(0.1f, 1f)] public float movementOpacity = 0.65f;
 
-    [Header("Color del destino durante el arrastre")]
-    public Color validDestinationColor = new Color(0.30f, 1f, 0.40f, 0.95f);
-    public Color attackDestinationColor = new Color(1f, 0.72f, 0.25f, 0.95f);
-    public Color invalidDestinationColor = new Color(1f, 0.28f, 0.30f, 0.90f);
+    [Header("Ataque (si se usa el marco dorado)")]
+    public Color attackDestinationColor = new Color(1f, 0.85f, 0.35f, 1f);
 
     private readonly List<SpriteRenderer> pooledCells = new List<SpriteRenderer>();
     private readonly HashSet<GridNode> reachableNodes = new HashSet<GridNode>();
@@ -161,25 +163,43 @@ public class MovementRangeVisualizer : MonoBehaviour
 
     private void UpdateDragPreview(AnimalUnit unit)
     {
-        if (casillaPrevisualizacion == null || IsOverUI() ||
+        if (IsOverUI() ||
             !TryGetBoardNode(out GridNode target) ||
-            target == unit.CurrentNode ||
-            !target.isWalkable)
+            target == unit.CurrentNode)
         {
             previewCell.enabled = false;
             return;
         }
 
-        // Verde: casilla realmente alcanzable desde el origen.
-        // Dorado: objetivo enemigo al que la unidad puede atacar.
-        // Rojo: destino no valido (no gastar movimiento ni actuar).
-        Color color = reachableNodes.Contains(target)
-            ? validDestinationColor
-            : CanAttackTarget(unit, target)
-                ? attackDestinationColor
-                : invalidDestinationColor;
+        // El sprite ya trae sus colores: no lo teñimos de verde/rojo.
+        // Un obstaculo o una casilla ocupada no atacable se marcan con X.
+        bool movimientoValido = unit.CanMove() &&
+                                target.isWalkable &&
+                                reachableNodes.Contains(target);
+        bool ataqueValido = !movimientoValido && CanAttackTarget(unit, target);
 
-        PlaceCell(previewCell, target, casillaPrevisualizacion, color.a,
+        Sprite sprite;
+        Color color = Color.white;
+
+        if (movimientoValido)
+        {
+            sprite = casillaDestinoValido;
+        }
+        else if (ataqueValido)
+        {
+            // Conservamos una indicacion distinta para atacar.
+            // Si falta este sprite, usamos el verde para no ocultar el objetivo.
+            sprite = casillaPrevisualizacion != null
+                ? casillaPrevisualizacion : casillaDestinoValido;
+            if (casillaPrevisualizacion != null)
+                color = attackDestinationColor;
+        }
+        else
+        {
+            sprite = casillaDestinoInvalido;
+        }
+
+        PlaceCell(previewCell, target, sprite, color.a,
             heightAboveNode + 0.04f);
         previewCell.color = color;
     }

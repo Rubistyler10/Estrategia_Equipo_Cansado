@@ -22,7 +22,7 @@ public class UnitHoverUI : MonoBehaviour
     public TMP_Text textoAtaque;
     public Image imagenRetrato;
 
-    [Header("Retratos (opcional)")]
+    [Header("Retratos")]
     public Sprite retratoJabali;
     public Sprite retratoTigre;
     public Sprite retratoGorila;
@@ -30,25 +30,20 @@ public class UnitHoverUI : MonoBehaviour
     public Sprite retratoCamello;
 
     private AnimalUnit unidadMostrada;
+    private AnimalHealthRing anilloResaltado;
 
     private void Start()
     {
-        if (gameCamera == null)
-            gameCamera = Camera.main;
-
+        if (gameCamera == null) gameCamera = Camera.main;
         if (gridManager == null)
             gridManager = FindFirstObjectByType<GridManager>();
-
         if (dragController == null)
             dragController = FindFirstObjectByType<AnimalDragController>();
 
-        // El panel es puramente informativo y no debe tapar el cursor.
         if (panelInfoUnidad != null)
         {
             CanvasGroup group = panelInfoUnidad.GetComponent<CanvasGroup>();
-            if (group == null)
-                group = panelInfoUnidad.AddComponent<CanvasGroup>();
-
+            if (group == null) group = panelInfoUnidad.AddComponent<CanvasGroup>();
             group.interactable = false;
             group.blocksRaycasts = false;
             panelInfoUnidad.SetActive(false);
@@ -66,52 +61,41 @@ public class UnitHoverUI : MonoBehaviour
         }
 
         AnimalUnit unidad = null;
-
-        // Durante el arrastre seguimos mostrando los datos del animal agarrado.
         if (dragController != null && dragController.SelectedAnimal != null)
         {
+            // Conservamos las estadisticas durante el arrastre.
             unidad = dragController.SelectedAnimal;
         }
         else
         {
-            // El panel no se muestra mientras se usan botones del HUD.
             if (EventSystem.current != null &&
                 EventSystem.current.IsPointerOverGameObject())
             {
                 OcultarPanel();
                 return;
             }
-
             Vector2 mouse = GetMousePosition();
-            if (mouse.x < 0 || mouse.y < 0 ||
+            if (mouse.x < 0f || mouse.y < 0f ||
                 mouse.x >= Screen.width || mouse.y >= Screen.height)
             {
                 OcultarPanel();
                 return;
             }
-
             Ray ray = gameCamera.ScreenPointToRay(mouse);
-
-            // Prioridad: collider del propio animal.
             if (Physics.Raycast(ray, out RaycastHit hit, 1000f,
                 ~0, QueryTriggerInteraction.Ignore))
             {
                 unidad = hit.collider.GetComponentInParent<AnimalUnit>();
             }
-
-            // Alternativa: consultar quién ocupa la casilla bajo el cursor.
             if (unidad == null)
             {
-                Plane boardPlane = new Plane(
-                    Vector3.up, gridManager.ground.position);
-
+                Plane boardPlane = new Plane(Vector3.up, gridManager.ground.position);
                 if (boardPlane.Raycast(ray, out float distance))
                 {
                     Vector3 point = ray.GetPoint(distance);
                     if (IsInsideBoard(point))
                     {
-                        GridNode node =
-                            gridManager.GetNodeFromWorldPosition(point);
+                        GridNode node = gridManager.GetNodeFromWorldPosition(point);
                         if (node != null && node.occupant != null)
                             unidad = node.occupant.GetComponent<AnimalUnit>();
                     }
@@ -125,7 +109,6 @@ public class UnitHoverUI : MonoBehaviour
             OcultarPanel();
             return;
         }
-
         MostrarUnidad(unidad);
     }
 
@@ -133,11 +116,13 @@ public class UnitHoverUI : MonoBehaviour
     {
         if (unidadMostrada != unidad)
         {
+            DesactivarHoverAnterior();
             unidadMostrada = unidad;
+            anilloResaltado = unidad.GetComponent<AnimalHealthRing>();
+            if (anilloResaltado != null) anilloResaltado.SetHovered(true);
 
             if (textoNombre != null)
                 textoNombre.text = GetAnimalName(unidad.animalType);
-
             if (imagenRetrato != null)
             {
                 Sprite sprite = GetPortrait(unidad.animalType);
@@ -145,25 +130,24 @@ public class UnitHoverUI : MonoBehaviour
                 imagenRetrato.gameObject.SetActive(sprite != null);
             }
         }
-
-        if (!panelInfoUnidad.activeSelf)
-            panelInfoUnidad.SetActive(true);
-
-        // La vida puede cambiar sin que el cursor abandone el animal.
+        if (!panelInfoUnidad.activeSelf) panelInfoUnidad.SetActive(true);
         if (textoVida != null)
             textoVida.text = unidad.CurrentHealth + "/" + unidad.maxHealth;
-
-        // Puntos de movimiento
         if (textoMovimiento != null)
             textoMovimiento.text = unidad.movementPoints.ToString();
-
-        // Estadística de ataque
         if (textoAtaque != null)
             textoAtaque.text = unidad.attack.ToString();
     }
 
+    private void DesactivarHoverAnterior()
+    {
+        if (anilloResaltado != null) anilloResaltado.SetHovered(false);
+        anilloResaltado = null;
+    }
+
     private void OcultarPanel()
     {
+        DesactivarHoverAnterior();
         unidadMostrada = null;
         if (panelInfoUnidad != null && panelInfoUnidad.activeSelf)
             panelInfoUnidad.SetActive(false);
@@ -200,7 +184,6 @@ public class UnitHoverUI : MonoBehaviour
         Vector3 center = gridManager.ground.position;
         float halfWidth = gridManager.width * gridManager.cellSize * 0.5f;
         float halfDepth = gridManager.depth * gridManager.cellSize * 0.5f;
-
         return point.x >= center.x - halfWidth &&
                point.x < center.x + halfWidth &&
                point.z >= center.z - halfDepth &&

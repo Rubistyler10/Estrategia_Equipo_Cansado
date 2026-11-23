@@ -65112,15 +65112,15 @@ MonoBehaviour:
   gameCamera: {fileID: 1045875810}
   gridManager: {fileID: 1490624896}
   dragController: {fileID: 176226983}
-  casillaMovimientoAzul: {fileID: -349282424, guid: 7064d9932c1bcde4c96b595e0b03566a, type: 3}
-  casillaMovimientoRoja: {fileID: -1454864361, guid: 7064d9932c1bcde4c96b595e0b03566a, type: 3}
-  casillaPrevisualizacion: {fileID: -850144461, guid: 7064d9932c1bcde4c96b595e0b03566a, type: 3}
+  casillaMovimientoAzul: {fileID: 865818522, guid: d70fe6fdab51c25459bfff476457ddb4, type: 3}
+  casillaMovimientoRoja: {fileID: 1646343320, guid: 207ae8dd0b8f1524f95bfdc93c6a2220, type: 3}
+  casillaDestinoValido: {fileID: -690668156, guid: 78b3642e1cb06254b8f2d60f83028b70, type: 3}
+  casillaDestinoInvalido: {fileID: 1390587873, guid: 45baf37584d3e10499985a3bfd4ee0e6, type: 3}
+  casillaPrevisualizacion: {fileID: -1420891530, guid: aa5616b6bc584d046b0ddc775bc1fc98, type: 3}
   cellFill: 0.94
   heightAboveNode: 1.03
   movementOpacity: 0.65
-  validDestinationColor: {r: 0.3, g: 1, b: 0.4, a: 0.95}
   attackDestinationColor: {r: 1, g: 0.72, b: 0.25, a: 0.95}
-  invalidDestinationColor: {r: 1, g: 0.28, b: 0.3, a: 0.9}
 --- !u!4 &388134341
 Transform:
   m_ObjectHideFlags: 0
@@ -327102,10 +327102,6 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
-    - target: {fileID: 1367521436120472719, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
-      propertyPath: groundOffset
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.46
@@ -327207,10 +327203,6 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
-    - target: {fileID: 3025024044737192340, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
-      propertyPath: groundOffset
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 3841327927142387608, guid: 6aa64302fc026a145b173a98fe685b1b, type: 3}
       propertyPath: m_Name
       value: "UNIDAD_JABAL\xCD"

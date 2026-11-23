@@ -117,6 +117,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12666ddd1b1b1be48b9856cdf5fefb78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimalHealthRing
+  aroJugador1: {fileID: -1212243853, guid: e20a990c45f60b541b0962d80ccee178, type: 3}
+  aroJugador2: {fileID: -1135859203, guid: 5b60af44070cf9a41bebfc814a01ce9d, type: 3}
+  hoverJugador1: {fileID: 1489055699, guid: daadefc4356192145884a9503b60e31c, type: 3}
+  hoverJugador2: {fileID: -1843212297, guid: fd4e57b4bcde61949a1464eb0d53553f, type: 3}
+  spriteCellFill: 0.9
+  spriteHeightOffset: 0.05
+  spriteSortingOrder: 12
   radiusInCells: 0.42
   lineWidthInCells: 0.08
   heightOffset: 0.04

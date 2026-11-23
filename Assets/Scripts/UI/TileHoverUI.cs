@@ -14,10 +14,11 @@ public class TileHoverUI : MonoBehaviour
     [Header("Referencias")]
     public Camera gameCamera;
     public GridManager gridManager;
+    public AnimalDragController dragController;
     public TMP_Text textoTerreno;
 
     [Header("Resaltado de casilla")]
-    public float heightAboveNode = 1f;
+    public float heightAboveNode = 0.08f;
 
     [Range(0.5f, 1f)]
     public float cellFill = 0.95f;
@@ -43,6 +44,10 @@ public class TileHoverUI : MonoBehaviour
         if (gridManager == null)
             gridManager = FindFirstObjectByType<GridManager>();
 
+        if (dragController == null)
+            dragController =
+                FindFirstObjectByType<AnimalDragController>();
+
         highlight = GetComponent<SpriteRenderer>();
 
         HideHighlight();
@@ -59,6 +64,15 @@ public class TileHoverUI : MonoBehaviour
 
     private void Update()
     {
+        // Durante el arrastre, el indicador de destino
+        // tiene prioridad sobre el hover dorado.
+        if (dragController != null &&
+            dragController.SelectedAnimal != null)
+        {
+            HideHighlight();
+            return;
+        }
+
         if (gameCamera == null ||
             gridManager == null ||
             gridManager.Grid == null ||
@@ -68,7 +82,7 @@ public class TileHoverUI : MonoBehaviour
             return;
         }
 
-        // Evitar detectar terrenos cuando el cursor
+        // No detectar casillas cuando el cursor
         // esta sobre elementos interactivos de la UI.
         if (EventSystem.current != null &&
             EventSystem.current.IsPointerOverGameObject())
@@ -88,7 +102,8 @@ public class TileHoverUI : MonoBehaviour
             return;
         }
 
-        Ray ray = gameCamera.ScreenPointToRay(mousePosition);
+        Ray ray =
+            gameCamera.ScreenPointToRay(mousePosition);
 
         Plane plane = new Plane(
             Vector3.up,
@@ -112,7 +127,7 @@ public class TileHoverUI : MonoBehaviour
         GridNode node =
             gridManager.GetNodeFromWorldPosition(worldPosition);
 
-        // No mostrar terreno sobre casillas bloqueadas.
+        // No resaltar casillas bloqueadas.
         if (node == null || !node.isWalkable)
         {
             HideHighlight();
@@ -127,15 +142,18 @@ public class TileHoverUI : MonoBehaviour
         if (highlight == null || highlight.sprite == null)
             return;
 
-        // Resaltar la casilla.
-        highlight.enabled = true;
+        // Mostrar el marco dorado solamente
+        // cuando la casilla esta libre.
+        highlight.enabled = !node.isOccupied;
 
         transform.position =
             node.worldPosition + Vector3.up * heightAboveNode;
 
-        float desiredSize = gridManager.cellSize * cellFill;
+        float desiredSize =
+            gridManager.cellSize * cellFill;
 
-        Vector2 spriteSize = highlight.sprite.bounds.size;
+        Vector2 spriteSize =
+            highlight.sprite.bounds.size;
 
         if (spriteSize.x > 0f && spriteSize.y > 0f)
         {
@@ -146,7 +164,7 @@ public class TileHoverUI : MonoBehaviour
             );
         }
 
-        // Actualizar solo cuando cambia la casilla.
+        // Actualizar el terreno solo al cambiar de casilla.
         if (currentNode != node)
         {
             currentNode = node;
@@ -160,7 +178,7 @@ public class TileHoverUI : MonoBehaviour
             MostrarImagenTerreno(node.terrainType);
         }
 
-        // Mostrar panel.
+        // Mostrar panel de informacion del terreno.
         if (panelInfoTerreno != null &&
             !panelInfoTerreno.activeSelf)
         {
@@ -194,7 +212,8 @@ public class TileHoverUI : MonoBehaviour
                 break;
         }
 
-        if (imagenPanelTerreno.sprite != nuevoSprite)
+        if (nuevoSprite != null &&
+            imagenPanelTerreno.sprite != nuevoSprite)
         {
             imagenPanelTerreno.sprite = nuevoSprite;
         }

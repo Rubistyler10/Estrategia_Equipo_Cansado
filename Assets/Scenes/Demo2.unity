@@ -3174,6 +3174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 20284661}
   - component: {fileID: 20284662}
+  - component: {fileID: 20284663}
   m_Layer: 0
   m_Name: ResourceZone_05
   m_TagString: Untagged
@@ -3211,6 +3212,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &20284663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20284660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1001 &20687696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25929,6 +25949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 166620855}
   - component: {fileID: 166620856}
+  - component: {fileID: 166620857}
   m_Layer: 0
   m_Name: ResourceZone_01
   m_TagString: Untagged
@@ -25966,6 +25987,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &166620857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166620854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &167178213
 GameObject:
   m_ObjectHideFlags: 0
@@ -49731,6 +49771,9 @@ MonoBehaviour:
   numeroTurno: {fileID: 1117043479}
   textoJugador: {fileID: 2200000016}
   textoAlimentos: {fileID: 1852479817}
+  imagenEncabezadoJugador: {fileID: 503108793}
+  encabezadoJugador1: {fileID: 665632059, guid: bb65c169a2c5b0e489ec8a1ece8c4891, type: 3}
+  encabezadoJugador2: {fileID: -148686396, guid: bb65c169a2c5b0e489ec8a1ece8c4891, type: 3}
 --- !u!114 &309493751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49752,6 +49795,9 @@ MonoBehaviour:
   textoMovimiento: {fileID: 576297688}
   textoAtaque: {fileID: 1997514148}
   imagenRetrato: {fileID: 1430839455}
+  imagenFondoUnidad: {fileID: 992563146}
+  fondoJugador1: {fileID: 1042041737, guid: bb65c169a2c5b0e489ec8a1ece8c4891, type: 3}
+  fondoJugador2: {fileID: -869266325, guid: bb65c169a2c5b0e489ec8a1ece8c4891, type: 3}
   retratoJabali: {fileID: 1123129939, guid: e15c70a118f7d114780571cadbb3ad2a, type: 3}
   retratoTigre: {fileID: -2004160036, guid: bddd996cb2042564dad9b3336a91bbc9, type: 3}
   retratoGorila: {fileID: 1190440724, guid: 306d723846ebc7340980f8b3abcff1e2, type: 3}
@@ -52840,6 +52886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 324861267}
   - component: {fileID: 324861268}
+  - component: {fileID: 324861269}
   m_Layer: 0
   m_Name: ResourceZone_08
   m_TagString: Untagged
@@ -52877,6 +52924,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &324861269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324861266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &325194318
 GameObject:
   m_ObjectHideFlags: 0
@@ -65118,7 +65184,7 @@ MonoBehaviour:
   casillaDestinoInvalido: {fileID: 1390587873, guid: 45baf37584d3e10499985a3bfd4ee0e6, type: 3}
   casillaPrevisualizacion: {fileID: -1420891530, guid: aa5616b6bc584d046b0ddc775bc1fc98, type: 3}
   cellFill: 0.94
-  heightAboveNode: 1.03
+  heightAboveNode: 0.5
   movementOpacity: 0.65
   attackDestinationColor: {r: 1, g: 0.72, b: 0.25, a: 0.95}
 --- !u!4 &388134341
@@ -166343,6 +166409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1030281210}
   - component: {fileID: 1030281211}
+  - component: {fileID: 1030281212}
   m_Layer: 0
   m_Name: ResourceZone_07
   m_TagString: Untagged
@@ -166380,6 +166447,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &1030281212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030281209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &1030326754
 GameObject:
   m_ObjectHideFlags: 0
@@ -177077,6 +177163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1099371180}
   - component: {fileID: 1099371181}
+  - component: {fileID: 1099371182}
   m_Layer: 0
   m_Name: ResourceZone_06
   m_TagString: Untagged
@@ -177114,6 +177201,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &1099371182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099371179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &1099440229
 GameObject:
   m_ObjectHideFlags: 0
@@ -207938,6 +208044,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1349159112}
   - component: {fileID: 1349159113}
+  - component: {fileID: 1349159114}
   m_Layer: 0
   m_Name: ResourceZone_09
   m_TagString: Untagged
@@ -207975,6 +208082,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &1349159114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349159111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &1349260012
 GameObject:
   m_ObjectHideFlags: 0
@@ -239934,6 +240060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1566588955}
   - component: {fileID: 1566588956}
+  - component: {fileID: 1566588957}
   m_Layer: 0
   m_Name: ResourceZone_02
   m_TagString: Untagged
@@ -239971,6 +240098,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &1566588957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566588954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &1567097775
 GameObject:
   m_ObjectHideFlags: 0
@@ -242293,8 +242439,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TileHoverUI
   gameCamera: {fileID: 1045875810}
   gridManager: {fileID: 1490624896}
+  dragController: {fileID: 176226983}
   textoTerreno: {fileID: 553979600}
-  heightAboveNode: 1
+  heightAboveNode: 0.3
   cellFill: 0.95
   panelInfoTerreno: {fileID: 2072581725}
   imagenPanelTerreno: {fileID: 2072581727}
@@ -242351,7 +242498,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -850144461, guid: 7064d9932c1bcde4c96b595e0b03566a, type: 3}
+  m_Sprite: {fileID: -1420891530, guid: aa5616b6bc584d046b0ddc775bc1fc98, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -257386,6 +257533,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1677282419}
   - component: {fileID: 1677282420}
+  - component: {fileID: 1677282421}
   m_Layer: 0
   m_Name: ResourceZone_04
   m_TagString: Untagged
@@ -257423,6 +257571,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &1677282421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677282418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &1677421947
 GameObject:
   m_ObjectHideFlags: 0
@@ -319791,6 +319958,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2102361299}
   - component: {fileID: 2102361300}
+  - component: {fileID: 2102361301}
   m_Layer: 0
   m_Name: ResourceZone_10
   m_TagString: Untagged
@@ -319828,6 +319996,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &2102361301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102361298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &2102764085
 GameObject:
   m_ObjectHideFlags: 0
@@ -323979,6 +324166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2129994943}
   - component: {fileID: 2129994944}
+  - component: {fileID: 2129994945}
   m_Layer: 0
   m_Name: ResourceZone_03
   m_TagString: Untagged
@@ -324016,6 +324204,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZone
   gridManager: {fileID: 1490624896}
   foodPerTurn: 2
+--- !u!114 &2129994945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129994942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
+  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
+  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  intervalo: 0.5
+  cellFill: 0.9
+  heightAboveNode: 0.25
+  sortingOrder: 5
+  dragController: {fileID: 0}
 --- !u!1 &2133413439
 GameObject:
   m_ObjectHideFlags: 0
@@ -326961,6 +327168,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 1643851316}
     m_Modifications:
     - target: {fileID: 3425257189567077349, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
+      propertyPath: attack
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3425257189567077349, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
+      propertyPath: maxHealth
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3425257189567077349, guid: 25b315ff0fddd094b803fade7b0048e2, type: 3}
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
@@ -327102,6 +327317,10 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
+    - target: {fileID: 1367521436120472719, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
+      propertyPath: plainMovementCost
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4525792887903080576, guid: 426e2fc45128fca43a566a679a3a7a6b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.46
@@ -327221,6 +327440,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1643851316}
     m_Modifications:
     - target: {fileID: 2422147882190899898, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
+      propertyPath: maxHealth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2422147882190899898, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 1490624896}
@@ -327228,6 +327451,10 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 1490624898}
+    - target: {fileID: 2422147882190899898, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
+      propertyPath: movementPoints
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5922607625655625514, guid: 262ab742ac2a91147a1b1e53429220bf, type: 3}
       propertyPath: m_Name
       value: UNIDAD_TIGRE

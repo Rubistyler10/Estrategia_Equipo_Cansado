@@ -72,8 +72,35 @@ public class GridManager : MonoBehaviour
                     halfExtents,
                     Quaternion.identity,
                     obstacleMask,
-                    QueryTriggerInteraction.Collide //evitar que los colliders marcados como triggers cuenten como obstáculos
+                    QueryTriggerInteraction.Collide // Incluir triggers de NavigationObstacle.
                 );
+
+                // DIAGNOSTICO TEMPORAL: identificar los colliders que bloquean
+                // las casillas iniciales del tigre, gorila y cocodrilo.
+                if (!isWalkable &&
+                    ((x == 14 && z == 19) ||
+                     (x == 24 && z == 20) ||
+                     (x == 18 && z == 23)))
+                {
+                    Collider[] colliders = Physics.OverlapBox(
+                        checkPosition,
+                        halfExtents,
+                        Quaternion.identity,
+                        obstacleMask,
+                        QueryTriggerInteraction.Collide
+                    );
+
+                    foreach (Collider col in colliders)
+                    {
+                        Debug.LogWarning(
+                            "[OBSTACULO DETECTADO] Casilla (" + x + ", " + z +
+                            ") bloqueada por: " + col.gameObject.name +
+                            " | Layer: " + LayerMask.LayerToName(col.gameObject.layer) +
+                            " | Trigger: " + col.isTrigger,
+                            col.gameObject
+                        );
+                    }
+                }
 
 
                 GridNode node = new GridNode(

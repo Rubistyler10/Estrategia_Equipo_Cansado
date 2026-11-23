@@ -97,11 +97,35 @@ public class AnimalUnit : MonoBehaviour
         GridNode node =
             gridManager.GetNodeFromWorldPosition(transform.position);
 
-        if (node == null ||
-            !gridManager.OccupyNode(
-                node.gridX, node.gridZ, gameObject))
+        if (node == null)
         {
-            Debug.LogError("Casilla inicial invalida: " + name);
+            Debug.LogError(
+                "[INICIO UNIDAD] " + name +
+                " - No se ha encontrado ninguna casilla. " +
+                "Posicion: " + transform.position);
+            enabled = false;
+            return;
+        }
+
+        if (!node.isWalkable || node.isOccupied)
+        {
+            Debug.LogError(
+                "[INICIO UNIDAD] " + name +
+                " - Casilla: (" + node.gridX + ", " + node.gridZ + ")" +
+                " - Posicion: " + transform.position +
+                " - Transitable: " + node.isWalkable +
+                " - Ocupada: " + node.isOccupied +
+                " - Ocupante: " +
+                (node.occupant != null ? node.occupant.name : "Ninguno"));
+            enabled = false;
+            return;
+        }
+
+        if (!gridManager.OccupyNode(node.gridX, node.gridZ, gameObject))
+        {
+            Debug.LogError(
+                "[INICIO UNIDAD] " + name +
+                " - No se pudo registrar la ocupacion.");
             enabled = false;
             return;
         }

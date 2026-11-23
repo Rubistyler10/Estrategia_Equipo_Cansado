@@ -1,7 +1,6 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UnitCreationUI : MonoBehaviour
 {
@@ -9,9 +8,6 @@ public class UnitCreationUI : MonoBehaviour
     public UnitSpawner unitSpawner;
     public ResourceManager resourceManager;
     public ResourceUI resourceUI;
-
-    // Prevent this player's recruitment controls from being used during the
-    // opposing player's turn.
     public TurnManager turnManager;
 
     [Header("Panel")]
@@ -19,32 +15,67 @@ public class UnitCreationUI : MonoBehaviour
     public Button botonAbrir;
     public Button botonCerrar;
 
-    [Header("Botones de animales")]
+    [Header("Botones de animales (click invisible)")]
     public Button botonJabali;
     public Button botonTigre;
     public Button botonGorila;
     public Button botonCocodrilo;
     public Button botonCamello;
 
+    [Header("Imagenes visibles")]
+    public Image imagenJabali;
+    public Image imagenTigre;
+    public Image imagenGorila;
+    public Image imagenCocodrilo;
+    public Image imagenCamello;
+
+    [Header("Sprites disponibles (SI)")]
+    public Sprite jabaliSI;
+    public Sprite tigreSI;
+    public Sprite gorilaSI;
+    public Sprite cocodriloSI;
+    public Sprite camelloSI;
+
+    [Header("Sprites no disponibles (NO)")]
+    public Sprite jabaliNO;
+    public Sprite tigreNO;
+    public Sprite gorilaNO;
+    public Sprite cocodriloNO;
+    public Sprite camelloNO;
+
     private void Start()
     {
-        botonAbrir.onClick.AddListener(AbrirPanel);
-        botonCerrar.onClick.AddListener(CerrarPanel);
+        if (hudSwitcher == null)
+            hudSwitcher = GetComponent<HUDSwitcher>();
 
-        botonJabali.onClick.AddListener(
-            () => CrearAnimal(AnimalType.Jabali));
+        if (turnManager == null)
+            turnManager = FindFirstObjectByType<TurnManager>();
 
-        botonTigre.onClick.AddListener(
-            () => CrearAnimal(AnimalType.Tigre));
+        if (botonAbrir != null)
+            botonAbrir.onClick.AddListener(AbrirPanel);
 
-        botonGorila.onClick.AddListener(
-            () => CrearAnimal(AnimalType.Gorila));
+        if (botonCerrar != null)
+            botonCerrar.onClick.AddListener(CerrarPanel);
 
-        botonCocodrilo.onClick.AddListener(
-            () => CrearAnimal(AnimalType.Cocodrilo));
+        if (botonJabali != null)
+            botonJabali.onClick.AddListener(
+                () => CrearAnimal(AnimalType.Jabali));
 
-        botonCamello.onClick.AddListener(
-            () => CrearAnimal(AnimalType.Camello));
+        if (botonTigre != null)
+            botonTigre.onClick.AddListener(
+                () => CrearAnimal(AnimalType.Tigre));
+
+        if (botonGorila != null)
+            botonGorila.onClick.AddListener(
+                () => CrearAnimal(AnimalType.Gorila));
+
+        if (botonCocodrilo != null)
+            botonCocodrilo.onClick.AddListener(
+                () => CrearAnimal(AnimalType.Cocodrilo));
+
+        if (botonCamello != null)
+            botonCamello.onClick.AddListener(
+                () => CrearAnimal(AnimalType.Camello));
     }
 
     private void Update()
@@ -54,9 +85,14 @@ public class UnitCreationUI : MonoBehaviour
             !hudSwitcher.hudReclutarUnidad.activeSelf)
             return;
 
+        if (resourceUI == null ||
+            resourceManager == null ||
+            unitSpawner == null)
+            return;
+
         int playerId = resourceUI.activePlayer;
 
-        // The panel may remain open across a turn change.
+        // Cerrar el menu si cambia el turno.
         if (turnManager != null &&
             !turnManager.IsPlayersTurn(playerId))
         {
@@ -64,57 +100,129 @@ public class UnitCreationUI : MonoBehaviour
             return;
         }
 
+        ActualizarBotones(playerId);
+    }
+
+    private void ActualizarBotones(int playerId)
+    {
         int food = resourceManager.GetFood(playerId);
 
-        botonJabali.interactable =
-            food >= unitSpawner.costeJabali;
+        ActualizarAnimal(
+            botonJabali,
+            imagenJabali,
+            jabaliSI,
+            jabaliNO,
+            food >= unitSpawner.costeJabali
+        );
 
-        botonTigre.interactable =
-            food >= unitSpawner.costeTigre;
+        ActualizarAnimal(
+            botonTigre,
+            imagenTigre,
+            tigreSI,
+            tigreNO,
+            food >= unitSpawner.costeTigre
+        );
 
-        botonGorila.interactable =
-            food >= unitSpawner.costeGorila;
+        ActualizarAnimal(
+            botonGorila,
+            imagenGorila,
+            gorilaSI,
+            gorilaNO,
+            food >= unitSpawner.costeGorila
+        );
 
-        botonCocodrilo.interactable =
-            food >= unitSpawner.costeCocodrilo;
+        ActualizarAnimal(
+            botonCocodrilo,
+            imagenCocodrilo,
+            cocodriloSI,
+            cocodriloNO,
+            food >= unitSpawner.costeCocodrilo
+        );
 
-        botonCamello.interactable =
-            food >= unitSpawner.costeCamello;
+        ActualizarAnimal(
+            botonCamello,
+            imagenCamello,
+            camelloSI,
+            camelloNO,
+            food >= unitSpawner.costeCamello
+        );
+    }
+
+    private void ActualizarAnimal(
+        Button boton,
+        Image imagen,
+        Sprite spriteSI,
+        Sprite spriteNO,
+        bool disponible)
+    {
+        // Activar o desactivar la compra.
+        if (boton != null)
+            boton.interactable = disponible;
+
+        // Cambiar solo la imagen visible.
+        if (imagen != null)
+        {
+            Sprite nuevoSprite =
+                disponible ? spriteSI : spriteNO;
+
+            if (nuevoSprite != null &&
+                imagen.sprite != nuevoSprite)
+            {
+                imagen.sprite = nuevoSprite;
+            }
+        }
     }
 
     public void AbrirPanel()
     {
-        if (hudSwitcher == null)
+        if (hudSwitcher == null ||
+            resourceUI == null ||
+            resourceManager == null ||
+            unitSpawner == null)
             return;
+
+        int playerId = resourceUI.activePlayer;
+
+        if (turnManager != null &&
+            !turnManager.IsPlayersTurn(playerId))
+            return;
+
+        // Actualizar antes de mostrar el menu.
+        ActualizarBotones(playerId);
 
         hudSwitcher.MostrarHUDReclutar();
     }
 
     public void CerrarPanel()
     {
-        if (hudSwitcher == null)
-            return;
-
-        hudSwitcher.MostrarHUDJugar();
+        if (hudSwitcher != null)
+            hudSwitcher.MostrarHUDJugar();
     }
 
     private void CrearAnimal(AnimalType tipo)
     {
+        if (resourceUI == null ||
+            resourceManager == null ||
+            unitSpawner == null)
+            return;
+
         int playerId = resourceUI.activePlayer;
 
-        // Check again at the action boundary in case a queued UI click
-        // arrives after the turn has changed.
         if (turnManager != null &&
             !turnManager.IsPlayersTurn(playerId))
             return;
 
-        bool creado =
-            unitSpawner.CreateUnit(playerId, tipo);
+        bool creado = unitSpawner.CreateUnit(playerId, tipo);
 
         if (creado)
         {
             Debug.Log("Unidad creada correctamente.");
             CerrarPanel();
+        }
+        else
+        {
+            // Refrescar si la compra no se completa.
+            ActualizarBotones(playerId);
         }
     }
 }

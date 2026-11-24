@@ -154,31 +154,7 @@ public class TurnManager : MonoBehaviour
     {
         if (collectedThisTurn || resourceManager == null)
             return;
-
-        // Resource collection is intentionally first-match only: one unit
-        // standing on one resource zone grants one collection per turn.
-        AnimalUnit[] units =
-            FindObjectsByType<AnimalUnit>(FindObjectsSortMode.None);
-
-        foreach (AnimalUnit unit in units)
-        {
-            PlayerOwnership owner = unit.GetComponent<PlayerOwnership>();
-            if (owner == null || owner.playerId != currentPlayerId ||
-                unit.CurrentNode == null)
-                continue;
-
-            ResourceZone[] zones =
-                FindObjectsByType<ResourceZone>(FindObjectsSortMode.None);
-
-            foreach (ResourceZone zone in zones)
-            {
-                if (zone.GetNode() == unit.CurrentNode)
-                {
-                    resourceManager.CollectResources(currentPlayerId);
-                    collectedThisTurn = true;
-                    return;
-                }
-            }
-        }
+        resourceManager.CollectResources(currentPlayerId);
+        collectedThisTurn = true;
     }
 }

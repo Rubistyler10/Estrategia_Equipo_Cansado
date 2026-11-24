@@ -126,7 +126,8 @@ public class AnimalDragController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (selectedAnimal == null || gridManager == null ||
+        if (InfluenceMap.SuppressOtherDebugGizmos ||
+            selectedAnimal == null || gridManager == null ||
             gridManager.Grid == null || selectedAnimal.CurrentNode == null)
             return;
 

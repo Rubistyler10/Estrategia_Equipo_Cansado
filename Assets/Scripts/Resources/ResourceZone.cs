@@ -62,6 +62,9 @@ public class ResourceZone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (InfluenceMap.SuppressOtherDebugGizmos)
+            return;
+
         Gizmos.color = new Color(1f, 0.85f, 0f, 0.75f);
 
         Vector3 position = transform.position;

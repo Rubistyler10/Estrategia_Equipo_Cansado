@@ -11,15 +11,15 @@ public class AStarPathfinding : MonoBehaviour
     GridNode targetNode,
     AnimalUnit animal)
     {
-        List<GridNode> openList = new List<GridNode>();
-
-        HashSet<GridNode> closedList = new HashSet<GridNode>();
-
-        if (startNode == null || targetNode == null ||
+        if (gridManager == null || gridManager.Grid == null ||
+            startNode == null || targetNode == null ||
             !startNode.isWalkable || !targetNode.isWalkable)
         {
             return new List<GridNode>();
         }
+
+        List<GridNode> openList = new List<GridNode>();
+        HashSet<GridNode> closedList = new HashSet<GridNode>();
 
         // Reiniciamos los datos de búsquedas anteriores.
         foreach (GridNode node in gridManager.Grid)
@@ -30,7 +30,7 @@ public class AStarPathfinding : MonoBehaviour
         }
 
         startNode.gCost = 0f;
-        startNode.hCost = GetHeuristic(startNode, targetNode);
+        startNode.hCost = GetHeuristic(startNode, targetNode, animal);
 
         openList.Add(startNode);
 
@@ -61,22 +61,31 @@ public class AStarPathfinding : MonoBehaviour
             // Exploramos los vecinos.
             foreach (GridNode neighbor in currentNode.neighbors)
             {
-                if (!neighbor.isWalkable ||
+                if (IsBlocked(neighbor, startNode) ||
                     closedList.Contains(neighbor))
                 {
                     continue;
                 }
 
-                float newCost = currentNode.gCost +
-                    gridManager.GetMovementCost(
-                        currentNode, neighbor
-                    );
+                if (IsDiagonalMove(currentNode, neighbor) &&
+                    HasBlockedCorner(currentNode, neighbor, startNode))
+                {
+                    continue;
+                }
+
+                float stepCost = GetStepCost(
+                    currentNode, neighbor, animal
+                );
+                if (stepCost == float.PositiveInfinity)
+                    continue;
+
+                float newCost = currentNode.gCost + stepCost;
 
                 if (newCost < neighbor.gCost)
                 {
                     neighbor.gCost = newCost;
                     neighbor.hCost = GetHeuristic(
-                        neighbor, targetNode
+                        neighbor, targetNode, animal
                     );
 
                     neighbor.parent = currentNode;
@@ -93,11 +102,62 @@ public class AStarPathfinding : MonoBehaviour
         return new List<GridNode>();
     }
 
+    private bool IsBlocked(GridNode node, GridNode startNode)
+    {
+        return !node.isWalkable ||
+               (node.isOccupied && node != startNode);
+    }
+
+    private bool IsDiagonalMove(GridNode from, GridNode to)
+    {
+        return from.gridX != to.gridX &&
+               from.gridZ != to.gridZ;
+    }
+
+    private bool HasBlockedCorner(
+        GridNode from, GridNode to, GridNode startNode)
+    {
+        GridNode horizontal =
+            gridManager.Grid[to.gridX, from.gridZ];
+        GridNode vertical =
+            gridManager.Grid[from.gridX, to.gridZ];
+
+        return IsBlocked(horizontal, startNode) ||
+               IsBlocked(vertical, startNode);
+    }
+
+    private float GetStepCost(
+        GridNode from, GridNode destination, AnimalUnit animal)
+    {
+        if (animal == null)
+            return gridManager.GetMovementCost(from, destination);
+
+        int terrainCost = animal.GetTerrainCost(destination.terrainType);
+        return terrainCost == int.MaxValue
+            ? float.PositiveInfinity
+            : terrainCost;
+    }
+
     private float GetHeuristic(
-        GridNode node, GridNode target)
+        GridNode node, GridNode target, AnimalUnit animal)
     {
         int dx = Mathf.Abs(node.gridX - target.gridX);
         int dz = Mathf.Abs(node.gridZ - target.gridZ);
+
+        if (animal != null)
+        {
+            int minimumTerrainCost = Mathf.Min(
+                animal.GetTerrainCost(TerrainType.Plain),
+                animal.GetTerrainCost(TerrainType.Desert),
+                animal.GetTerrainCost(TerrainType.Snow),
+                animal.GetTerrainCost(TerrainType.Water)
+            );
+
+            if (minimumTerrainCost == int.MaxValue)
+                return 0f;
+
+            return Mathf.Max(dx, dz) * minimumTerrainCost;
+        }
 
         int diagonal = Mathf.Min(dx, dz);
         int straight = Mathf.Max(dx, dz) - diagonal;

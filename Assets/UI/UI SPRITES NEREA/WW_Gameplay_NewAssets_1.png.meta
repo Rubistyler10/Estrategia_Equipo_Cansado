@@ -147,7 +147,7 @@ TextureImporter:
         x: 1566
         y: 814
         width: 354
-        height: 111
+        height: 112
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,28 +158,6 @@ TextureImporter:
       bones: []
       spriteID: 92be405eb045fe644b90999cc78392ef
       internalID: 1799213686
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WW_Gameplay_NewAssets_1_5
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 545
-        width: 457
-        height: 180
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da765715369a0734ca276ac5acf28945
-      internalID: -958033156
       vertices: []
       indices: 
       edges: []
@@ -273,13 +251,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WW_Gameplay_NewAssets_1_1
+      name: WW_Gameplay_NewAssets_1_5
       rect:
         serializedVersion: 2
-        x: 358
-        y: 919
-        width: 94
-        height: 39
+        x: 0
+        y: 545
+        width: 457
+        height: 180
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -288,30 +266,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6385cfe12843336408824d59543cf97e
-      internalID: -1229138355
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WW_Gameplay_NewAssets_1_3
-      rect:
-        serializedVersion: 2
-        x: 1450
-        y: 917
-        width: 94
-        height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0d3893ed36722b04aae833cb538ee4dd
-      internalID: -1216281083
+      spriteID: 0c65f04de969a9b42866b51c48c447c9
+      internalID: -958033156
       vertices: []
       indices: 
       edges: []

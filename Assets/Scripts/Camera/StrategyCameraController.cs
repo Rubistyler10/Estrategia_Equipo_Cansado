@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.EventSystems;
 
 #if ENABLE_INPUT_SYSTEM
@@ -36,7 +37,13 @@ public class StrategyCameraController : MonoBehaviour
     public float minPitch = 35f;
     public float maxPitch = 75f;
 
+    [Header("Inicio de partida")]
+    [Min(0f)] public float initialCenterDelay = 1f;
+    private bool initialFocusCancelled;
+
     [Header("Camara cinematografica")]
+    [Min(0.1f)] public float selectionPositionSmoothness = 2.3f;
+    [Min(0.1f)] public float selectionZoomSmoothness = 2.8f;
     public bool focusOnSelection = true;
     public bool followMovingUnit = true;
     public float cinematicZoom = 10f;
@@ -60,6 +67,50 @@ public class StrategyCameraController : MonoBehaviour
 
     private AnimalUnit trackedUnit;
     private bool ignoreSelectionUntilRelease;
+
+    [Header("Vista tactica cenital")]
+    public bool enableTacticalView = true;
+    [Min(0.1f)] public float orthographicZoomFactor = 0.75f;
+
+    private bool tacticalViewActive;
+    private float previousPerspectiveYaw;
+    private float previousPerspectivePitch;
+
+    // Disponible desde Tab o desde el OnClick de un Button.
+    public void ToggleTacticalView()
+    {
+        if (!enableTacticalView || cam == null)
+            return;
+
+        tacticalViewActive = !tacticalViewActive;
+
+        if (tacticalViewActive)
+        {
+            previousPerspectiveYaw = targetYaw;
+            previousPerspectivePitch = targetPitch;
+
+            // Si se estaba siguiendo un animal, volver al encuadre anterior.
+            if (trackedUnit != null)
+            {
+                targetFocus = previousFocus;
+                trackedUnit = null;
+            }
+
+            targetDistance = zoomLevels[zoomIndex];
+            targetYaw = 0f;
+            targetPitch = 90f;
+        }
+        else
+        {
+            targetYaw = previousPerspectiveYaw;
+            targetPitch = previousPerspectivePitch;
+            targetDistance = zoomLevels[zoomIndex];
+        }
+
+        ignoreSelectionUntilRelease = true;
+        cam.orthographic = tacticalViewActive;
+    }
+
 
     private void Start()
     {
@@ -98,18 +149,28 @@ public class StrategyCameraController : MonoBehaviour
         currentFocus = targetFocus =
             gridManager.ground.position;
 
+        // Comenzar en el centro, no directamente sobre las unidades.
         if (turnManager != null)
-        {
             previousPlayer = turnManager.currentPlayerId;
-            currentFocus = targetFocus =
-                GetPlayerFocus(previousPlayer);
-        }
 
         ApplyCameraTransform();
+        StartCoroutine(FocusInitialPlayerAfterDelay());
+    }
+
+    private IEnumerator FocusInitialPlayerAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(initialCenterDelay);
+
+        // Si el jugador ya ha movido la camara, no forzamos el enfoque.
+        if (!initialFocusCancelled && turnManager != null && !turnManager.IsGameOver)
+            targetFocus = ClampToBoard(GetPlayerFocus(turnManager.currentPlayerId));
     }
 
     private void LateUpdate()
     {
+        if (WasTabPressed())
+            ToggleTacticalView();
+
         CheckTurnChange();
 
         Vector2 movement = ReadMovement();
@@ -118,6 +179,7 @@ public class StrategyCameraController : MonoBehaviour
 
         if (keyboardMoving || middlePanning)
         {
+            initialFocusCancelled = true;
             // Los controles manuales cancelan el seguimiento cinematico.
             trackedUnit = null;
             ignoreSelectionUntilRelease = true;
@@ -158,7 +220,7 @@ public class StrategyCameraController : MonoBehaviour
             targetDistance = zoomLevels[zoomIndex];
         }
 
-        if (!middlePanning && IsRightMousePressed() && !IsPointerOverUI())
+        if (!tacticalViewActive && !middlePanning && IsRightMousePressed() && !IsPointerOverUI())
         {
             Vector2 delta = ReadMouseDelta();
 
@@ -172,11 +234,17 @@ public class StrategyCameraController : MonoBehaviour
 
         float dt = Time.unscaledDeltaTime;
 
+        // La seleccion tiene una transicion mas lenta que la navegacion normal.
+        float focusSpeed = trackedUnit != null
+            ? selectionPositionSmoothness : positionSmoothness;
+        float focusZoomSpeed = trackedUnit != null
+            ? selectionZoomSmoothness : zoomSmoothness;
+
         float positionT = 1f -
-            Mathf.Exp(-positionSmoothness * dt);
+            Mathf.Exp(-focusSpeed * dt);
 
         float zoomT = 1f -
-            Mathf.Exp(-zoomSmoothness * dt);
+            Mathf.Exp(-focusZoomSpeed * dt);
 
         float rotationT = 1f -
             Mathf.Exp(-rotationSmoothness * dt);
@@ -193,6 +261,13 @@ public class StrategyCameraController : MonoBehaviour
         currentPitch = Mathf.Lerp(
             currentPitch, targetPitch, rotationT);
 
+        if (tacticalViewActive)
+        {
+            // La rueda conserva los mismos niveles de zoom en ambas vistas.
+            float desiredSize = Mathf.Max(1f, currentDistance * orthographicZoomFactor);
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, desiredSize, zoomT);
+        }
+
         ApplyCameraTransform();
     }
 
@@ -203,6 +278,7 @@ public class StrategyCameraController : MonoBehaviour
             return;
 
         previousPlayer = turnManager.currentPlayerId;
+        initialFocusCancelled = true;
         trackedUnit = null;
 
         targetFocus = GetPlayerFocus(previousPlayer);
@@ -213,6 +289,10 @@ public class StrategyCameraController : MonoBehaviour
 
     private void UpdateUnitFocus()
     {
+        // El zoom cinematografico no interfiere en la vista tactica.
+        if (tacticalViewActive)
+            return;
+
         AnimalUnit selected = dragController != null
             ? dragController.SelectedAnimal
             : null;
@@ -377,6 +457,17 @@ public class StrategyCameraController : MonoBehaviour
         }
 
         return Vector3.zero;
+    }
+
+    private static bool WasTabPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame;
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        return Input.GetKeyDown(KeyCode.Tab);
+#else
+        return false;
+#endif
     }
 
     private static bool IsMiddleMousePressed()

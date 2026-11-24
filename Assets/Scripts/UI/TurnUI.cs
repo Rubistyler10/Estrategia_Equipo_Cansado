@@ -51,9 +51,7 @@ public class TurnUI : MonoBehaviour
         // Nombre del jugador activo.
         if (textoJugador != null)
         {
-            textoJugador.text = turnManager.IsGameOver
-                ? "Jugador " + turnManager.WinningPlayerId + " gana"
-                : "Jugador " + jugador;
+            textoJugador.text = "Jugador " + jugador;
         }
 
         // Mostrar solamente la cantidad de alimentos.

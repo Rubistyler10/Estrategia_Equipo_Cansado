@@ -163,70 +163,105 @@ public class AnimalUnit : MonoBehaviour
     
 public void Drop(GridNode destination)
 {
-    if (destination == null || !CanReach(destination))
+    if (destination == null || destination == CurrentNode)
     {
-        // All invalid paths use CancelDrag so the visual position matches the
-        // node that still owns the unit.
+        Debug.Log("[ANIMALUNIT][DROP] Movimiento cancelado para " + name + ".");
+        CancelDrag();
+        return;
+    }
+
+    List<GridNode> path = FindMovementPath(destination);
+    if (!StartMovement(path))
+    {
         Debug.Log("[ANIMALUNIT][DROP] Movimiento rechazado para " + name + ".");
         CancelDrag();
         return;
     }
+}
 
-    // Si soltamos el animal en su propia casilla.
-    if (destination == CurrentNode)
+/// <summary>
+/// Requests an A* route and moves this unit as far along it as its movement
+/// allowance permits. The caller supplies the objective for this turn.
+/// </summary>
+public bool MoveTowardsObjective(GridNode objective)
+{
+    if (!CanMove() || objective == null ||
+        objective == CurrentNode || pathfinding == null)
     {
-        Debug.Log("[ANIMALUNIT][DROP] Movimiento cancelado en la casilla de origen: " + name + ".");
-        CancelDrag();
-        return;
+        return false;
     }
 
-    // Guardamos el origen antes de actualizar CurrentNode.
-    GridNode origin = CurrentNode;
+    TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+    if (turnManager != null && !turnManager.CanUnitAct(this))
+        return false;
 
-    // Calculamos la ruta que seguirá visualmente.
     List<GridNode> path = pathfinding.FindPath(
-        origin,
-        destination,
-        this
+        CurrentNode, objective, this
     );
+    if (path == null || path.Count < 2)
+        return false;
 
-    if (path == null || path.Count == 0)
+    int totalCost = 0;
+    int lastReachableIndex = 0;
+    for (int i = 1; i < path.Count; i++)
     {
-        Debug.Log("[ANIMALUNIT][DROP] No se encontro ruta para " + name + ".");
-        CancelDrag();
-        return;
+        int stepCost = GetTerrainCost(path[i].terrainType);
+        if (stepCost == int.MaxValue ||
+            stepCost > movementPoints - totalCost)
+        {
+            break;
+        }
+
+        totalCost += stepCost;
+        lastReachableIndex = i;
     }
 
-    // Reservamos la casilla de destino.
-    bool occupied = gridManager.OccupyNode(
-        destination.gridX,
-        destination.gridZ,
-        gameObject
-    );
+    if (lastReachableIndex == 0)
+        return false;
 
-    if (!occupied)
+    List<GridNode> movementPath =
+        path.GetRange(0, lastReachableIndex + 1);
+    return StartMovement(movementPath);
+}
+
+private bool StartMovement(List<GridNode> path)
+{
+    if (!CanMove() || path == null || path.Count < 2 ||
+        path[0] != CurrentNode || gridManager == null)
     {
-        Debug.Log("[ANIMALUNIT][DROP] Casilla de destino ocupada para " + name + ".");
-        CancelDrag();
-        return;
+        return false;
     }
 
-    // Liberamos la casilla anterior.
-    gridManager.FreeNode(
-        origin.gridX,
-        origin.gridZ,
-        gameObject
-    );
+    GridNode origin = CurrentNode;
+    GridNode destination = path[path.Count - 1];
+    if (destination == null || destination.isOccupied ||
+        !destination.isWalkable || !PathIsWithinMovementPoints(path))
+    {
+        return false;
+    }
+
+    if (!gridManager.OccupyNode(
+        destination.gridX, destination.gridZ, gameObject))
+    {
+        return false;
+    }
+
+    if (!gridManager.FreeNode(
+        origin.gridX, origin.gridZ, gameObject))
+    {
+        gridManager.FreeNode(
+            destination.gridX, destination.gridZ, gameObject);
+        Debug.LogError(
+            "[ANIMALUNIT][MOVE] No se pudo liberar la casilla de origen de " +
+            name + ".");
+        return false;
+    }
 
     CurrentNode = destination;
     HasMovedThisTurn = true;
-    Debug.Log("[ANIMALUNIT][DROP] " + name + " se mueve a (" +
-        destination.gridX + "," + destination.gridZ + ").");
-
-    // Volvemos visualmente al origen para recorrer la ruta.
     transform.position = GetGroundPosition(origin);
-
     walkRoutine = StartCoroutine(WalkAlongPath(path));
+    return true;
 }
 
     // Restore the visual position without changing grid registration.
@@ -446,35 +481,40 @@ public bool CanReach(GridNode destination)
     if (destination == CurrentNode)
         return true;
 
-    // No podemos movernos a una casilla bloqueada u ocupada.
-    if (!destination.isWalkable || destination.isOccupied)
-        return false;
+    return FindMovementPath(destination).Count > 0;
+}
 
-    // Calculamos la ruta utilizando A*.
+private List<GridNode> FindMovementPath(GridNode destination)
+{
+    if (CurrentNode == null || destination == null ||
+        pathfinding == null || !destination.isWalkable ||
+        destination.isOccupied || movementPoints < 0)
+    {
+        return new List<GridNode>();
+    }
+
     List<GridNode> path = pathfinding.FindPath(
-        CurrentNode,
-        destination,
-        this
+        CurrentNode, destination, this
     );
 
+    return PathIsWithinMovementPoints(path)
+        ? path
+        : new List<GridNode>();
+}
+
+private bool PathIsWithinMovementPoints(List<GridNode> path)
+{
     if (path == null || path.Count == 0)
         return false;
 
     int totalCost = 0;
-
-    // La primera casilla es el origen y no tiene coste.
     for (int i = 1; i < path.Count; i++)
     {
         int cost = GetTerrainCost(path[i].terrainType);
-
-        if (cost == int.MaxValue)
+        if (cost == int.MaxValue || cost > movementPoints - totalCost)
             return false;
 
         totalCost += cost;
-
-        // No podemos superar los puntos de movimiento.
-        if (totalCost > movementPoints)
-            return false;
     }
 
     return true;

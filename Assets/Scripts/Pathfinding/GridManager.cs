@@ -237,7 +237,8 @@ public class GridManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (ground == null || cellSize <= 0f)
+        if (InfluenceMap.SuppressOtherDebugGizmos ||
+            ground == null || cellSize <= 0f)
             return;
 
         Gizmos.color = Color.green;

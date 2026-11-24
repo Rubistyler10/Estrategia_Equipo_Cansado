@@ -230340,6 +230340,7 @@ GameObject:
   - component: {fileID: 1490624897}
   - component: {fileID: 1490624896}
   - component: {fileID: 1490624898}
+  - component: {fileID: 1490624899}
   m_Layer: 0
   m_Name: GridManager
   m_TagString: Untagged
@@ -230397,6 +230398,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarPathfinding
   gridManager: {fileID: 1490624896}
+--- !u!114 &1490624899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490624895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8d47bd519f4ec4a8f0d7c2a61e9351, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::InfluenceMap
+  gridManager: {fileID: 1490624896}
+  influenceRadiusInTiles: 5
+  showInfluenceGizmos: 1
+  exclusiveVisualization: 1
+  displayMode: 0
+  showInfluenceValues: 1
+  maxVisibleInfluence: 5
+  gizmoHeight: 0.15
+  gizmoCellFill: 0.85
+  influenceTransparency: 0.25
+  player1Color: {r: 0, g: 0.2, b: 1, a: 1}
+  player2Color: {r: 1, g: 0, b: 0, a: 1}
+  overlapColor: {r: 0.65, g: 0, b: 1, a: 1}
 --- !u!1 &1491695654
 GameObject:
   m_ObjectHideFlags: 0

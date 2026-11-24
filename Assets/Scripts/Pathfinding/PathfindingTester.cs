@@ -73,7 +73,8 @@ public class PathfindingTester : MonoBehaviour
     private void OnDrawGizmos()
     {
         // Si no hay camino, no dibujamos nada.
-        if (path == null || path.Count == 0)
+        if (InfluenceMap.SuppressOtherDebugGizmos ||
+            path == null || path.Count == 0)
             return;
 
         Gizmos.color = Color.yellow;

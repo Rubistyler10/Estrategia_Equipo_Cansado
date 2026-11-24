@@ -3224,8 +3224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -25999,8 +25999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -52936,8 +52936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -166459,8 +166459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -177213,8 +177213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -208094,8 +208094,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -240110,8 +240110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -257583,8 +257583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -320008,8 +320008,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25
@@ -324216,8 +324216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4948f36af4a070a4bafbfe95044a2cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceZoneVisual
-  spriteReposo: {fileID: -1549514135, guid: beee7c21f06b8f84d80fff8a1b3deedc, type: 3}
-  spriteOcupado: {fileID: -1019210780, guid: 67b11e0c6ff9613428321124c2761143, type: 3}
+  spriteReposo: {fileID: 983700008, guid: b68cdf3ac5692274f8a7fbfe22443acb, type: 3}
+  spriteOcupado: {fileID: 231352691, guid: d3c8268f1cfd0414a98bf9cbf22e8368, type: 3}
   intervalo: 0.5
   cellFill: 0.9
   heightAboveNode: 0.25

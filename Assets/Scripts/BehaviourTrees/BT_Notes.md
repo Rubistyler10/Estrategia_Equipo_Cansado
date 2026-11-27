@@ -272,3 +272,7 @@ BehaviourTreeExample2(){
 // ... rest of the stuff
 ``` 
 # Blackboards
+
+The blackboard is the communication system between tasks in a Behaviour Tree or between different Behaviour Trees.
+It provides an enum of ObjectiveTypes and allows for creation of objectives with additional info to work with.
+**There can only be 1 objective per type**.
